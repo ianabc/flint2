@@ -33,6 +33,11 @@
 #include "fmpz.h"
 
 
+mp_limb_t mpn_mul_basecase(mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+void mpn_sqr_basecase(mp_ptr, mp_srcptr, mp_size_t);
+
+
 #if FLINT64
 #define LIMBS64 1
 #define LIMBS128 2
@@ -90,5 +95,34 @@ void fmpr128_mul(fmpr128_t, const fmpr128_t, const fmpr128_t);
 void fmpr192_mul(fmpr192_t, const fmpr192_t, const fmpr192_t);
 void fmpr256_mul(fmpr256_t, const fmpr256_t, const fmpr256_t);
 
+void fixed_print(mp_srcptr x, long limbs, long frac_limbs);
+
+mp_size_t fixed_set_mpfr(mp_ptr y, mpfr_srcptr t, mp_size_t prec);
+
+void fixed_get_mpfr(mpfr_t dest, mp_srcptr src, mp_size_t size, mp_size_t prec);
+
+
+/* TODO: allow caches to be resized at runtime */
+#define EXP_CACHE1_BITS 8
+#define EXP_CACHE2_BITS 8
+#define EXP_CACHE_PREC_BITS 320
+#define EXP_CACHE_PREC_LIMBS (EXP_CACHE_PREC_BITS / FLINT_BITS)
+
+extern mp_limb_t exp_cache_1[1 << EXP_CACHE1_BITS][EXP_CACHE_PREC_LIMBS + 1];
+extern mp_limb_t exp_cache_2[1 << EXP_CACHE1_BITS][EXP_CACHE_PREC_LIMBS + 1];
+
+extern int exp_cache_initialised;
+
+void exp_cache_init();
+
+void fixed_eval_series_1(mp_ptr y,
+                            mp_srcptr coeffs,
+                            mp_srcptr x, int limbs, int terms, int sums);
+
+void fixed_exp(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+
+void fixed_exp_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+
+void fixed_exp_mpfr(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
 
 #endif
