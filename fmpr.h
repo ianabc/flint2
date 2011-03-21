@@ -102,6 +102,15 @@ mp_size_t fixed_set_mpfr(mp_ptr y, mpfr_srcptr t, mp_size_t prec);
 void fixed_get_mpfr(mpfr_t dest, mp_srcptr src, mp_size_t size, mp_size_t prec);
 
 
+
+void
+fixed_eval_series_1(mp_ptr y,
+                    mp_srcptr coeffs,
+                    mp_srcptr denoms,
+                    int split_denoms,
+                    mp_srcptr x, int limbs, int terms, int sums);
+
+
 /* TODO: allow caches to be resized at runtime */
 #define EXP_CACHE1_BITS 8
 #define EXP_CACHE2_BITS 8
@@ -110,19 +119,23 @@ void fixed_get_mpfr(mpfr_t dest, mp_srcptr src, mp_size_t size, mp_size_t prec);
 
 extern mp_limb_t exp_cache_1[1 << EXP_CACHE1_BITS][EXP_CACHE_PREC_LIMBS + 1];
 extern mp_limb_t exp_cache_2[1 << EXP_CACHE1_BITS][EXP_CACHE_PREC_LIMBS + 1];
-
 extern int exp_cache_initialised;
-
 void exp_cache_init();
 
-void fixed_eval_series_1(mp_ptr y,
-                            mp_srcptr coeffs,
-                            mp_srcptr x, int limbs, int terms, int sums);
-
+void fixed_exp_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+void fixed_exp_mpfr(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
 void fixed_exp(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
 
-void fixed_exp_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
 
-void fixed_exp_mpfr(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+#define LOG_CACHE_BITS 9
+#define LOG_CACHE_PREC_BITS 320
+#define LOG_CACHE_PREC_LIMBS (LOG_CACHE_PREC_BITS / FLINT_BITS) 
+
+extern mp_limb_t log_cache[1 << LOG_CACHE_BITS][LOG_CACHE_PREC_LIMBS];
+extern int log_cache_initialised;
+void log_cache_init();
+void fixed_log_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+void fixed_log_mpfr(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
+void fixed_log(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits);
 
 #endif
