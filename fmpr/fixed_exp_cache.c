@@ -131,7 +131,8 @@ void fixed_exp_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits)
         t[limbs - 1] = (top << (EXP_CACHE1_BITS + EXP_CACHE2_BITS)) >> \
                             (EXP_CACHE1_BITS + EXP_CACHE2_BITS);
 
-        fixed_eval_series_1(u, exp_coeffs, t, limbs, terms, sums);
+        fixed_eval_series_1(u, exp_coeffs, exp_coeffs, 0,
+            t, limbs, terms, sums);
 
         /* exp(x1+x2+t) = exp(x1)*exp(x2)*exp(t) */
         mpn_mul_basecase(t, u, limbs + 1,

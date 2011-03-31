@@ -181,7 +181,8 @@ void fixed_log_cache(mp_ptr y, mp_srcptr x, mp_size_t limbs, long tol_bits)
         mpn_mul_basecase(t, a, limbs + 1, s, limbs);
         mpn_lshift(t + limbs, t + limbs, limbs, 1);
 
-        mpn_add_n(y, t + limbs, log_cache[i1] + (LOG_CACHE_PREC_LIMBS - limbs), limbs);
+        mpn_add_n(y, t + limbs, log_cache[i1]
+                                    + (LOG_CACHE_PREC_LIMBS - limbs), limbs);
         return;
     }
 
