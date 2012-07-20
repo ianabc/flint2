@@ -30,7 +30,7 @@
 #include "fmpz_poly.h"
 
 
-#define FLINT_REVERSE_NEWTON_CUTOFF 10
+#define FLINT_REVERSE_NEWTON_CUTOFF 3
 
 void
 _fmpz_poly_revert_series_newton(fmpz * Qinv, const fmpz * Q, long n)

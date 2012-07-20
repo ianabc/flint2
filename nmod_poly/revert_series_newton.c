@@ -30,7 +30,7 @@
 #include "nmod_poly.h"
 #include "ulong_extras.h"
 
-#define FLINT_REVERSE_NEWTON_CUTOFF 15
+#define FLINT_REVERSE_NEWTON_CUTOFF 3
 
 void
 _nmod_poly_revert_series_newton(mp_ptr Qinv, mp_srcptr Q, long n, nmod_t mod)

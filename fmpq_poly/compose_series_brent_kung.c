@@ -33,6 +33,7 @@
 #include "fmpq.h"
 #include "fmpq_mat.h"
 #include "ulong_extras.h"
+#include "profiler.h"
 
 static void
 _fmpq_mat_get_row(fmpz * rnum, fmpz_t den, fmpq_mat_t A, long i)
@@ -137,7 +138,19 @@ _fmpq_poly_compose_series_brent_kung(fmpz * res, fmpz_t den, const fmpz * poly1,
     fmpz_swap(hden, tden);
 
     /* Matrix multiply */
-    fmpq_mat_mul(C, B, A);
+    if (n >= 100)
+    {
+        timeit_t t0;
+        timeit_start(t0);
+        fmpq_mat_mul(C, B, A);
+        timeit_stop(t0);
+        printf(" [matmul: %ld ms] ", t0->cpu);
+    }
+    else
+    {
+        fmpq_mat_mul(C, B, A);
+    }
+
     fmpq_mat_clear(A);
     fmpq_mat_clear(B);
 

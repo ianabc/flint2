@@ -29,6 +29,7 @@
 #include "nmod_poly.h"
 #include "nmod_mat.h"
 #include "ulong_extras.h"
+#include "profiler.h"
 
 void
 _nmod_poly_compose_series_brent_kung(mp_ptr res, mp_srcptr poly1, long len1, 
@@ -64,7 +65,18 @@ _nmod_poly_compose_series_brent_kung(mp_ptr res, mp_srcptr poly1, long len1,
     for (i = 2; i < m; i++)
         _nmod_poly_mullow(A->rows[i], A->rows[i-1], n, poly2, len2, n, mod);
 
-    nmod_mat_mul(C, B, A);
+    if (n >= 500)
+    {
+        timeit_t t0;
+        timeit_start(t0);
+        nmod_mat_mul(C, B, A);
+        timeit_stop(t0);
+        printf(" [mm: %ld ms] ", t0->cpu);
+    }
+    else
+    {
+        nmod_mat_mul(C, B, A);
+    }
 
     /* Evaluate block composition using the Horner scheme */
     _nmod_vec_set(res, C->rows[m - 1], n);

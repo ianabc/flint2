@@ -29,6 +29,7 @@
 #include "fmpz_poly.h"
 #include "fmpz_mat.h"
 #include "ulong_extras.h"
+#include "profiler.h"
 
 void
 _fmpz_poly_compose_series_brent_kung(fmpz * res, const fmpz * poly1, long len1, 
@@ -64,7 +65,18 @@ _fmpz_poly_compose_series_brent_kung(fmpz * res, const fmpz * poly1, long len1,
     for (i = 2; i < m; i++)
         _fmpz_poly_mullow(A->rows[i], A->rows[i-1], n, poly2, len2, n);
 
-    fmpz_mat_mul(C, B, A);
+    if (n >= 100)
+    {
+        timeit_t t0;
+        timeit_start(t0);
+        fmpz_mat_mul_classical(C, B, A);
+        timeit_stop(t0);
+        printf(" [matmul %ld ms] ", t0->cpu);
+    }
+    else
+    {
+        fmpz_mat_mul_classical(C, B, A);
+    }
 
     /* Evaluate block composition using the Horner scheme */
     _fmpz_vec_set(res, C->rows[m - 1], n);
