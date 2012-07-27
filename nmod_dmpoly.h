@@ -122,6 +122,11 @@ int _nmod_dmpoly_equal(arr_srcptr p1, arr_srcptr p2, int vars);
 
 int nmod_dmpoly_equal(const nmod_dmpoly_t p1, const nmod_dmpoly_t p2);
 
+static __inline__ int nmod_dmpoly_is_zero(const nmod_dmpoly_t poly)
+{
+    return poly->arr.length == 0;
+}
+
 /* Coefficient manipulation **************************************************/
 
 mp_limb_t _nmod_dmpoly_get_coeff_ui(arr_srcptr poly, long * pos, int vars);
@@ -154,6 +159,17 @@ void __nmod_dmpoly_add(void * z, const void * x, long xlen,
                             const void * y, long ylen, int vars, nmod_t mod);
 void _nmod_dmpoly_add(arr_ptr z, arr_srcptr x, arr_srcptr y, int vars, nmod_t mod);
 void nmod_dmpoly_add(nmod_dmpoly_t z, const nmod_dmpoly_t x, const nmod_dmpoly_t y);
+
+void __nmod_dmpoly_neg(void * dest, const void * src, long len, int vars, nmod_t mod);
+void _nmod_dmpoly_neg(arr_ptr dest, arr_srcptr src, int vars, nmod_t mod);
+void nmod_dmpoly_neg(nmod_dmpoly_t dest, const nmod_dmpoly_t src);
+
+void __nmod_dmpoly_sub(void * z, const void * x, long xlen,
+                            const void * y, long ylen, int vars, nmod_t mod);
+void _nmod_dmpoly_sub(arr_ptr z, arr_srcptr x, arr_srcptr y, int vars, nmod_t mod);
+void nmod_dmpoly_sub(nmod_dmpoly_t z, const nmod_dmpoly_t x, const nmod_dmpoly_t y);
+
+
 
 void __nmod_dmpoly_mul(void * z, const void * x, long xlen,
                             const void * y, long ylen, int vars, nmod_t mod);
