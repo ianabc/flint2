@@ -29,6 +29,7 @@
 #include <mpir.h>
 #include <mpfr.h>
 #include "longlong.h"
+#include "config.h"
 
 #ifdef __cplusplus
  extern "C" {
@@ -63,6 +64,8 @@ void flint_free(void * ptr);
 
 #define mp_bitcnt_t unsigned long
 
+int flint_test_multiplier(void);
+
 typedef struct
 {
     gmp_randstate_t gmp_state;
@@ -78,11 +81,11 @@ void flint_randinit(flint_rand_t state)
 {
     state->gmp_init = 0;
 #if FLINT64
-    state->__randval = 4035456057UL;
-    state->__randval2 = 6748392731UL;
+    state->__randval = 13845646450878251009UL;
+    state->__randval2 = 13142370077570254774UL;
 #else
-    state->__randval = 3119766748UL;
-    state->__randval2 = 4225528843UL;
+    state->__randval = 4187301858UL;
+    state->__randval2 = 3721271368UL;
 #endif
 }
 

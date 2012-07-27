@@ -30,6 +30,8 @@
 #include "nmod_poly.h"
 #include "ulong_extras.h"
 
+#if !defined (__WIN32) && !defined (__CYGWIN__)
+
 int
 main(void)
 {
@@ -41,7 +43,7 @@ main(void)
     fflush(stdout);
 
     /* Check reading and writing to a file */
-    for (i = 0; i < 10000; i++)
+    for (i = 0; i < 1000 * flint_test_multiplier(); i++)
     {
         nmod_poly_t a, b;
         mp_limb_t n = n_randtest_not_zero(state);
@@ -90,3 +92,15 @@ main(void)
     printf("PASS\n");
     return 0;
 }
+
+#else
+
+int main(void)
+{
+    printf("print/ read....");
+    fflush(stdout);
+    printf("SKIPPED\n");
+    return EXIT_SUCCESS;
+}
+
+#endif

@@ -51,8 +51,12 @@ or implied, of William Hart.
 
 #if !defined(mpn_sumdiff_n)
 #define mpn_sumdiff_n(t, u, r, s, n) \
-   (n == 0 ? (mp_limb_t) 0 : (mpn_add_n(t, r, s, n)<<1) + mpn_sub_n(u, r, s, n))
+   ((mpn_add_n(t, r, s, n)<<1) + mpn_sub_n(u, r, s, n))
 #endif
+
+#define fft_sumdiff(t, u, r, s, n) \
+   (n == 0 ? 0 : mpn_sumdiff_n(t, u, r, s, n))
+
 
 #define SWAP_PTRS(xx, yy) \
    do { \
@@ -64,8 +68,16 @@ or implied, of William Hart.
 /* used for generating random values mod p in test code */
 #define random_fermat(nn, state, limbs) \
    do { \
-      mpn_rrandom(nn, state->gmp_state, limbs); \
-      nn[limbs] = n_randint(state, 1024); \
+      if (n_randint(state, 10) == 0) { \
+         mpn_zero(nn, limbs); \
+         nn[limbs] = 1; \
+      } else { \
+         if (n_randint(state, 2) == 0) \
+            mpn_rrandom(nn, state->gmp_state, limbs); \
+         else \
+            mpn_urandomb(nn, state->gmp_state, limbs*FLINT_BITS); \
+         nn[limbs] = n_randint(state, 1024); \
+      } \
       if (n_randint(state, 2)) \
          nn[limbs] = -nn[limbs]; \
    } while (0)

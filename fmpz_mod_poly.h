@@ -106,6 +106,8 @@ fmpz_mod_poly_randtest_not_zero(fmpz_mod_poly_t f,
 
 /*  Attributes ***************************************************************/
 
+#define fmpz_mod_poly_modulus(poly)  (&((poly)->p))
+
 static __inline__ 
 long fmpz_mod_poly_degree(const fmpz_mod_poly_t poly)
 {
@@ -513,6 +515,8 @@ int _fmpz_mod_poly_fprint(FILE * file, const fmpz *poly, long len,
                           const fmpz_t p);
 
 int fmpz_mod_poly_fprint(FILE * file, const fmpz_mod_poly_t poly);
+
+int fmpz_mod_poly_fread(FILE * file, fmpz_mod_poly_t poly);
 
 static __inline__ 
 int fmpz_mod_poly_fprint_pretty(FILE * file, 

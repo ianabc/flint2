@@ -55,7 +55,7 @@ main(void)
     flint_randinit(state);
 
     /* Check aliasing of a and b */
-    for (i = 0; i < 1000; i++)
+    for (i = 0; i < 100 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, b, c;
 
@@ -83,7 +83,7 @@ main(void)
     }
 
     /* Check aliasing of a and c */
-    for (i = 0; i < 1000; i++)
+    for (i = 0; i < 100 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, b, c;
 
@@ -111,7 +111,7 @@ main(void)
     }
 
     /* Check that a divides GCD(af, ag) */
-    for (i = 0; i < 3000; i++)
+    for (i = 0; i < 300 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, d, f, g, q, r;
 
@@ -151,7 +151,7 @@ main(void)
     }
 
     /* Check that a == GCD(af, ag) when GCD(f, g) = 1 */
-    for (i = 0; i < 3000; i++)
+    for (i = 0; i < 300 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, d, f, g, q, r;
 
@@ -218,6 +218,35 @@ main(void)
         fmpz_poly_clear(a);
         fmpz_poly_clear(b);
         fmpz_poly_clear(d);
+    }
+
+    /* another test case */
+    {
+        fmpz_poly_t a, b, d, e;
+
+        fmpz_poly_init(a);
+        fmpz_poly_init(b);
+        fmpz_poly_init(d);
+        fmpz_poly_init(e);
+
+        fmpz_poly_set_str(a, "12  0 0 0 0 0 0 0 0 0 8582594367 -9297159048333985579007 33822867456");
+        fmpz_poly_set_str(b, "8  0 0 -258272396248218664896 0 -2762 -549690802047 -3771028 8796059467776");
+        fmpz_poly_set_str(e, "3  0 0 1");
+
+        fmpz_poly_gcd_modular(d, a, b);
+
+        result = fmpz_poly_equal(d, e);
+        if (!result)
+        {
+            printf("FAIL (check special #2):\n");
+            fmpz_poly_print(d); printf("\n"); 
+            abort();
+        }
+
+        fmpz_poly_clear(a);
+        fmpz_poly_clear(b);
+        fmpz_poly_clear(d);
+        fmpz_poly_clear(e);
     }
 
     flint_randclear(state);

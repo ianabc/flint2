@@ -43,7 +43,7 @@ main(void)
     flint_randinit(state);
 
     /* Rectangular transpose */
-    for (rep = 0; rep < 1000; rep++)
+    for (rep = 0; rep < 100 * flint_test_multiplier(); rep++)
     {
         fmpz_mat_t A, B, C;
 
@@ -83,6 +83,8 @@ main(void)
 
         fmpz_mat_randtest(A, state, 1+n_randint(state, 100));
         fmpz_mat_set(B, A);
+        fmpz_mat_transpose(B, B);
+        fmpz_mat_transpose(B, B);
 
         if (!fmpz_mat_equal(B, A))
         {

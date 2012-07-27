@@ -84,6 +84,8 @@ mp_limb_t n_randint(flint_rand_t state, mp_limb_t limit);
 
 mp_limb_t n_randbits(flint_rand_t state, unsigned int bits);
 
+mp_limb_t n_randtest_bits(flint_rand_t state, int bits);
+
 mp_limb_t n_randtest(flint_rand_t state);
 
 mp_limb_t n_randtest_not_zero(flint_rand_t state);
@@ -136,6 +138,9 @@ mp_limb_t n_mulmod_precomp(mp_limb_t a, mp_limb_t b,
 mp_limb_t n_mulmod2_preinv(mp_limb_t a, mp_limb_t b, 
                                         mp_limb_t n, mp_limb_t ninv);
 
+mp_limb_t
+n_powmod_ui_precomp(mp_limb_t a, mp_limb_t exp, mp_limb_t n, double npre);
+
 mp_limb_t n_powmod_precomp(mp_limb_t a, 
                      mp_limb_signed_t exp, mp_limb_t n, double npre);
 
@@ -149,6 +154,9 @@ mp_limb_t n_powmod(mp_limb_t a, mp_limb_signed_t exp, mp_limb_t n)
 
 mp_limb_t n_powmod2_preinv(mp_limb_t a, 
                   mp_limb_signed_t exp, mp_limb_t n, mp_limb_t ninv);
+
+mp_limb_t n_powmod2_ui_preinv(mp_limb_t a, mp_limb_t exp,
+                                            mp_limb_t n, mp_limb_t ninv);
 
 static __inline__
 mp_limb_t n_powmod2(mp_limb_t a, mp_limb_signed_t exp, mp_limb_t n)
@@ -177,6 +185,13 @@ mp_limb_t n_negmod(mp_limb_t x, mp_limb_t n)
 }
 
 mp_limb_t n_sqrtmod(mp_limb_t a, mp_limb_t p);
+
+long n_sqrtmod_2pow(mp_limb_t ** sqrt, mp_limb_t a, long exp); 
+
+long n_sqrtmod_primepow(mp_limb_t ** sqrt, mp_limb_t a, 
+                                              mp_limb_t p, long exp);
+
+long n_sqrtmodn(mp_limb_t ** sqrt, mp_limb_t a, n_factor_t * fac);
 
 mp_limb_t n_gcd(mp_limb_t x, mp_limb_t y);
 
@@ -283,6 +298,8 @@ int n_sizeinbase(mp_limb_t n, int base);
 mp_limb_t n_nextprime(mp_limb_t n, int proved);
 
 mp_limb_t n_factorial_mod2_preinv(ulong n, mp_limb_t p, mp_limb_t pinv);
+
+mp_limb_t n_factorial_fast_mod2_preinv(ulong n, mp_limb_t p, mp_limb_t pinv);
 
 #ifdef __cplusplus
 }

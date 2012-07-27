@@ -49,7 +49,7 @@ main(void)
 
     flint_randinit(state);
 
-    for (i = 0; i < 1000UL; i++)
+    for (i = 0; i < 100 * flint_test_multiplier(); i++)
     {
         fmpq_poly_t a;
         fmpz_t x1, x2;
@@ -60,7 +60,7 @@ main(void)
         fmpz_init(x2);
         len = (long) (n_randint(state, 100) + 1);
 
-        for (j = 0; j < 1000; j++)
+        for (j = 0; j < 100; j++)
         {
             fmpz_randtest(x1, state, 200);
             fmpz_get_mpz(mpq_numref(n1), x1);

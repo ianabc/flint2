@@ -44,7 +44,7 @@ main(void)
     flint_randinit(state);
 
     /* Check aliasing of a and b */
-    for (i = 0; i < 500; i++)
+    for (i = 0; i < 50 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, b, c;
 
@@ -72,7 +72,7 @@ main(void)
     }
 
     /* Check aliasing of a and c */
-    for (i = 0; i < 500; i++)
+    for (i = 0; i < 50 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, b, c;
 
@@ -100,7 +100,7 @@ main(void)
     }
 
     /* Check that a divides GCD(af, ag) */
-    for (i = 0; i < 500; i++)
+    for (i = 0; i < 50 * flint_test_multiplier(); i++)
     {
         fmpz_poly_t a, d, f, g, q, r;
 
@@ -126,6 +126,7 @@ main(void)
             printf("FAIL (check a | gcd(af, ag)):\n");
             fmpz_poly_print(f), printf("\n");
             fmpz_poly_print(g), printf("\n");
+            fmpz_poly_print(a), printf("\n");
             fmpz_poly_print(d), printf("\n");
             abort();
         }

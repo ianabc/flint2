@@ -34,8 +34,12 @@
  extern "C" {
 #endif
 
-#ifndef uint64_t
-#define uint64_t unsigned long
+#if FLINT_BITS==64
+   #ifndef uint64_t
+   #define uint64_t unsigned long
+   #endif
+#else
+   #include <stdint.h>
 #endif
 
 /* 
@@ -191,8 +195,8 @@ typedef qs_s qs_t[1];
 */
 static const mp_limb_t qsieve_ll_tune[][5] =
 {
-    {0, 50, 50, 2, 14000 },
-	{30, 50, 60, 2, 16000 },
+    {0, 50, 80, 2, 14000 },
+    {30, 50, 80, 2, 16000 },
     {40, 50, 100, 3, 18000 },
     {50, 50, 120, 3, 20000 },
     {60, 50, 140, 4, 22000 },

@@ -33,19 +33,18 @@
 long
 fmpz_mat_nullspace(fmpz_mat_t res, const fmpz_mat_t mat)
 {
-    long i, j, k, m, n, rank, nullity;
+    long i, j, k, n, rank, nullity;
     long * pivots;
     long * nonpivots;
     fmpz_mat_t tmp;
     fmpz_t den;
 
-    m = mat->r;
     n = mat->c;
 
     fmpz_mat_init_set(tmp, mat);
     fmpz_init(den);
 
-    rank = fmpz_mat_rref(tmp, den, NULL, mat);
+    rank = fmpz_mat_rref(tmp, den, mat);
     nullity = n - rank;
 
     fmpz_mat_zero(res);

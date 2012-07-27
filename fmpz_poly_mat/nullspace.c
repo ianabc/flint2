@@ -32,18 +32,17 @@
 long
 fmpz_poly_mat_nullspace(fmpz_poly_mat_t res, const fmpz_poly_mat_t mat)
 {
-    long i, j, k, m, n, rank, nullity;
+    long i, j, k, n, rank, nullity;
     long * pivots;
     long * nonpivots;
     fmpz_poly_mat_t tmp;
     fmpz_poly_t den;
 
-    m = mat->r;
     n = mat->c;
 
     fmpz_poly_init(den);
     fmpz_poly_mat_init_set(tmp, mat);
-    rank = fmpz_poly_mat_rref(tmp, den, NULL, tmp);
+    rank = fmpz_poly_mat_rref(tmp, den, tmp);
     nullity = n - rank;
 
     fmpz_poly_mat_zero(res);

@@ -79,12 +79,17 @@ void _fmpz_clear_mpz(fmpz f)
     fmpz_num_unused++;   
 }
 
-void _fmpz_cleanup(void)
+void _fmpz_cleanup_mpz_content(void)
 {
     long i;
     for (i = 0; i < fmpz_num_unused; i++)
         mpz_clear(fmpz_arr + fmpz_unused_arr[i]);
-    
+}
+
+void _fmpz_cleanup(void)
+{
+    _fmpz_cleanup_mpz_content();
+
     if (fmpz_num_unused) flint_free(fmpz_unused_arr);
     if (fmpz_allocated) flint_free(fmpz_arr);
 }
@@ -139,3 +144,22 @@ void _fmpz_demote_val(fmpz_t f)
     /* don't do anything if value has to be multi precision */
 }
 
+void _fmpz_init_readonly_mpz(fmpz_t f, mpz_t z)
+{
+   __mpz_struct *ptr;
+   *f = 0L;
+   ptr = _fmpz_promote(f);
+
+   mpz_clear(ptr);
+   *ptr = *z;
+}
+
+void _fmpz_clear_readonly_mpz(mpz_t z)
+{
+    if (((z->_mp_size == 1 || z->_mp_size == -1) && (z->_mp_d[0] <= COEFF_MAX))
+        || (z->_mp_size == 0))
+    {
+        mpz_clear(z);
+    }
+
+}

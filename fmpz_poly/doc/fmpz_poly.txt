@@ -34,7 +34,7 @@
 void fmpz_poly_init(fmpz_poly_t poly)
 
     Initialises \code{poly} for use, setting its length to zero.  
-    A corresponding call to \code{fmpz_poly_clear()} must be made after 
+    A corresponding call to\\ \code{fmpz_poly_clear()} must be made after 
     finishing with the \code{fmpz_poly_t} to free the memory used by 
     the polynomial.
 
@@ -371,6 +371,11 @@ void fmpz_poly_scalar_mul_fmpz(fmpz_poly_t poly1,
 
     Sets \code{poly1} to \code{poly2} times $x$.
 
+void fmpz_poly_scalar_mul_mpz(fmpz_poly_t poly1, 
+                                       const fmpz_poly_t poly2, const mpz_t x)
+
+    Sets \code{poly1} to \code{poly2} times the \code{mpz_t} $x$.
+
 void fmpz_poly_scalar_mul_si(fmpz_poly_t poly1, fmpz_poly_t poly2, long x)
 
     Sets \code{poly1} to \code{poly2} times the signed \code{long x}.
@@ -378,6 +383,10 @@ void fmpz_poly_scalar_mul_si(fmpz_poly_t poly1, fmpz_poly_t poly2, long x)
 void fmpz_poly_scalar_mul_ui(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong x)
 
     Sets \code{poly1} to \code{poly2} times the \code{unsigned long x}.
+
+void fmpz_poly_scalar_mul_2exp(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong exp)
+
+    Sets \code{poly1} to \code{poly2} times \code{2^exp}.
 
 void fmpz_poly_scalar_addmul_fmpz(fmpz_poly_t poly1, const fmpz_poly_t poly2, 
                                                                 const fmpz_t x)
@@ -395,6 +404,12 @@ void fmpz_poly_scalar_fdiv_fmpz(fmpz_poly_t poly1,
     Sets \code{poly1} to \code{poly2} divided by the \code{fmpz_t x}, 
     rounding coefficients down toward~$- \infty$.
 
+void fmpz_poly_scalar_fdiv_mpz(fmpz_poly_t poly1, 
+                                       const fmpz_poly_t poly2, const mpz_t x)
+
+    Sets \code{poly1} to \code{poly2} divided by the \code{mpz_t x}, 
+    rounding coefficients down toward~$- \infty$.
+
 void fmpz_poly_scalar_fdiv_si(fmpz_poly_t poly1, fmpz_poly_t poly2, long x)
 
     Sets \code{poly1} to \code{poly2} divided by the \code{long x}, 
@@ -403,6 +418,11 @@ void fmpz_poly_scalar_fdiv_si(fmpz_poly_t poly1, fmpz_poly_t poly2, long x)
 void fmpz_poly_scalar_fdiv_ui(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong x)
 
     Sets \code{poly1} to \code{poly2} divided by the \code{unsigned long x}, 
+    rounding coefficients down toward~$- \infty$.
+
+void fmpz_poly_scalar_fdiv_2exp(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong x)
+
+    Sets \code{poly1} to \code{poly2} divided by \code{2^x}, 
     rounding coefficients down toward~$- \infty$.
 
 void fmpz_poly_scalar_tdiv_fmpz(fmpz_poly_t poly1, 
@@ -421,10 +441,21 @@ void fmpz_poly_scalar_tdiv_ui(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong x)
     Sets \code{poly1} to \code{poly2} divided by the \code{unsigned long x}, 
     rounding coefficients toward~$0$.
 
+void fmpz_poly_scalar_tdiv_2exp(fmpz_poly_t poly1, fmpz_poly_t poly2, ulong x)
+
+    Sets \code{poly1} to \code{poly2} divided by \code{2^x}, 
+    rounding coefficients toward~$0$.
+
 void fmpz_poly_scalar_divexact_fmpz(fmpz_poly_t poly1, 
                                        const fmpz_poly_t poly2, const fmpz_t x)
 
     Sets \code{poly1} to \code{poly2} divided by the \code{fmpz_t x}, 
+    assuming the coefficient is exact for every coefficient.
+
+void fmpz_poly_scalar_divexact_mpz(fmpz_poly_t poly1, 
+                                       const fmpz_poly_t poly2, const mpz_t x)
+
+    Sets \code{poly1} to \code{poly2} divided by the \code{mpz_t x}, 
     assuming the coefficient is exact for every coefficient.
 
 void fmpz_poly_scalar_divexact_si(fmpz_poly_t poly1, fmpz_poly_t poly2, long x)
@@ -647,9 +678,7 @@ void _fmpz_poly_mul_SS(fmpz * output, const fmpz * input1, long length1,
                                             const fmpz * input2, long length2)
 
     Sets \code{(output, length1 + length2 - 1)} to the product of 
-    \code{(input1, length1)} and \code{(input2, length2)}. If the number of 
-    bits per output coefficient (made negative if any of the input 
-    coefficients are negative) is know it may be specified as \code{bits_in}.
+    \code{(input1, length1)} and \code{(input2, length2)}.
 
     We must have \code{len1 > 1} and \code{len2 > 1}.  Allows zero-padding 
     of the two input polynomials.  Supports aliasing of inputs and outputs.
@@ -1137,6 +1166,9 @@ void _fmpz_poly_xgcd_modular(fmpz_t r, fmpz * s, fmpz * t,
     It is assumed that \code{len1 >= len2 > 0}. No aliasing of inputs and 
     outputs is permitted.
 
+    The function assumes that $f$ and $g$ are primitive (have Gaussian content
+    equal to 1). The result is undefined otherwise.
+
     Uses a multimodular algorithm. The resultant is first computed and 
     extended GCD's modulo various primes $p$ are computed and combined using
     CRT. When the CRT stabilises the resulting polynomials are simply reduced
@@ -1149,6 +1181,9 @@ void fmpz_poly_xgcd_modular(fmpz_t r, fmpz_poly_t s, fmpz_poly_t t,
     function then returns immediately, otherwise $s$ and $t$ are found such
     that \code{s*f + t*g = r}.
 
+    The function assumes that $f$ and $g$ are primitive (have Gaussian content
+    equal to 1). The result is undefined otherwise.
+
     Uses the multimodular algorithm.
 
 void _fmpz_poly_xgcd(fmpz_t r, fmpz * s, fmpz * t, 
@@ -1160,6 +1195,9 @@ void _fmpz_poly_xgcd(fmpz_t r, fmpz * s, fmpz * t,
     of $s$ will be no greater than \code{len2} and the length of $t$ will be
     no greater than \code{len1} (both are zero padded if necessary).
 
+    The function assumes that $f$ and $g$ are primitive (have Gaussian content
+    equal to 1). The result is undefined otherwise.
+
     It is assumed that \code{len1 >= len2 > 0}. No aliasing of inputs and 
     outputs is permitted.
 
@@ -1169,6 +1207,9 @@ void fmpz_poly_xgcd(fmpz_t r, fmpz_poly_t s, fmpz_poly_t t,
     Set $r$ to the resultant of $f$ and $g$. If the resultant is zero, the
     function then returns immediately, otherwise $s$ and $t$ are found such
     that \code{s*f + t*g = r}.
+
+    The function assumes that $f$ and $g$ are primitive (have Gaussian content
+    equal to 1). The result is undefined otherwise.
 
 void _fmpz_poly_lcm(fmpz * res, const fmpz * poly1, long len1, 
                                               const fmpz * poly2, long len2)
@@ -1993,7 +2034,7 @@ void _fmpz_poly_compose_series_horner(fmpz * res,
     to be zero.
 
     Assumes that \code{len1, len2, n > 0}, that \code{len1, len2 <= n},
-    and that \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
+    and that\\ \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
     space for \code{n} coefficients. Does not support aliasing between any
     of the inputs and the output.
 
@@ -2016,7 +2057,7 @@ void _fmpz_poly_compose_series_brent_kung(fmpz * res, const fmpz * poly1,
     to be zero.
 
     Assumes that \code{len1, len2, n > 0}, that \code{len1, len2 <= n},
-    and that \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
+    and that\\ \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
     space for \code{n} coefficients. Does not support aliasing between any
     of the inputs and the output.
 
@@ -2039,7 +2080,7 @@ void _fmpz_poly_compose_series(fmpz * res, const fmpz * poly1, long len1,
     to be zero.
 
     Assumes that \code{len1, len2, n > 0}, that \code{len1, len2 <= n},
-    and that \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
+    and that\\ \code{(len1-1) * (len2-1) + 1 <= n}, and that \code{res} has
     space for \code{n} coefficients. Does not support aliasing between any
     of the inputs and the output.
 
@@ -2351,7 +2392,7 @@ long _fmpz_poly_hensel_start_lift(fmpz_poly_factor_t lifted_fac, long *link,
     this function so that you can keep them for restarting Hensel lifting 
     later. The product of local factors must be squarefree.
 
-    The return value is an exponent which must be passed to the function 
+    The return value is an exponent which must be passed to the function\\ 
     \code{_fmpz_poly_hensel_continue_lift()} as \code{prev_exp} if the 
     Hensel lifting is to be resumed.
 
@@ -2368,7 +2409,7 @@ long _fmpz_poly_hensel_continue_lift(fmpz_poly_factor_t lifted_fac,
 
     It lifts from \code{curr} to $N$. It also requires \code{prev} 
     (to lift the cofactors) given as the return value of the function 
-    \code{_fmpz_poly_hensel_start_lift()} or the function 
+    \code{_fmpz_poly_hensel_start_lift()} or the function\\ 
     \code{_fmpz_poly_hensel_continue_lift()}. The current lifted factors 
     are supplied in \code{lifted_fac} and upon return are updated
     there. As usual \code{link}, \code{v}, and \code{w} describe the 
