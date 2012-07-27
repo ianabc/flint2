@@ -209,4 +209,17 @@ void __nmod_dmpoly_pow(void * z, const void * x, long xlen, ulong exp, int vars,
 void _nmod_dmpoly_pow(arr_ptr z, arr_srcptr x, ulong exp, int vars, nmod_t mod);
 void nmod_dmpoly_pow(nmod_dmpoly_t z, const nmod_dmpoly_t x, ulong exp);
 
+/* Division */
+
+void __nmod_dmpoly_divrem_basecase(arr_ptr Q, arr_ptr R, arr_srcptr A,
+    long lenA, arr_srcptr B, long lenB, int vars, nmod_t mod);
+
+void
+_nmod_dmpoly_divrem_basecase(arr_ptr Q, arr_ptr R,
+                                        arr_srcptr A, arr_srcptr B, int vars, nmod_t mod);
+
+void
+nmod_dmpoly_divrem_basecase(nmod_dmpoly_t Q, nmod_dmpoly_t R, const nmod_dmpoly_t A,
+                                    const nmod_dmpoly_t B);
+
 #endif
