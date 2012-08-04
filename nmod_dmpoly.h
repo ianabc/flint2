@@ -95,6 +95,8 @@ void _nmod_dmpoly_zero(arr_struct * poly, int vars);
 
 void nmod_dmpoly_zero(nmod_dmpoly_t poly);
 
+void nmod_dmpoly_one(nmod_dmpoly_t poly);
+
 void _nmod_dmpoly_set_ui(arr_ptr poly, mp_limb_t c, int vars);
 
 void nmod_dmpoly_set_ui(nmod_dmpoly_t poly, mp_limb_t c);
