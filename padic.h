@@ -122,6 +122,7 @@ int _padic_ctx_pow_ui(fmpz_t rop, ulong e, const padic_ctx_t ctx)
     }
 }
 
+
 /* Memory management *********************************************************/
 
 void padic_init(padic_t rop);

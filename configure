@@ -9,6 +9,8 @@ PREFIX="/usr/local"
 GMP_DIR="/usr/local"
 MPFR_DIR="/usr/local"
 NTL_DIR="/usr/local"
+FLINT_CPIMPORT_DIR="$PREFIX/share/flint"
+FLINT_CPIMPORT="$FLINT_CPIMPORT_DIR/CP.txt"
 BLAS_DIR="/usr/local"
 WANT_NTL=0
 WANT_BLAS=0
@@ -68,6 +70,8 @@ while [ "$1" != "" ]; do
          ;;
       --prefix)
          PREFIX="$VALUE"
+         FLINT_CPIMPORT_DIR="$PREFIX/share/flint"
+         FLINT_CPIMPORT="$FLINT_CPIMPORT_DIR/CP.txt"
          ;;
       --disable-shared)
          SHARED=0
@@ -358,7 +362,7 @@ fi
 
 #add tuning parameters to CFLAGS
 
-CFLAGS="$CFLAGS $FLINT_TUNE"
+CFLAGS="$CFLAGS $FLINT_TUNE -DFLINT_CPIMPORT=\\\"$FLINT_CPIMPORT\\\""
 
 #PIC flag
 
@@ -422,6 +426,8 @@ echo "FLINT_MPFR_LIB_DIR=$MPFR_LIB_DIR" >> Makefile
 echo "FLINT_MPFR_INCLUDE_DIR=$MPFR_INCLUDE_DIR" >> Makefile
 echo "FLINT_NTL_LIB_DIR=$NTL_LIB_DIR" >> Makefile
 echo "FLINT_NTL_INCLUDE_DIR=$NTL_INCLUDE_DIR" >> Makefile
+echo "FLINT_CPIMPORT_DIR=$FLINT_CPIMPORT_DIR" >> Makefile
+echo "FLINT_CPIMPORT=$FLINT_CPIMPORT" >> Makefile
 echo "" >> Makefile
 echo "FLINT_LIB=$FLINT_LIB" >> Makefile
 echo "CC=$CC" >> Makefile
