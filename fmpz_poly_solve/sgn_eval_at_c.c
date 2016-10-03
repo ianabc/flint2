@@ -14,9 +14,8 @@
 int fmpz_poly_solve_sgn_eval_at_c(const fmpz_poly_t P, const fmpz_t c)
 {
     fmpz_t r;
-    long s;
+    slong s;
 
-    printf("a\n");
     fmpz_poly_evaluate_fmpz(r, P, c);
     s = fmpz_sgn(r);
     fmpz_clear(r);

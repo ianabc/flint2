@@ -23,48 +23,31 @@ main(void)
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 12; iter++)
-      /* 1000 * flint_test_multiplier(); iter++) */
+    for (iter = 0; iter < 1000 * flint_test_multiplier(); iter++) 
     {
-        printf("iter: %d\n\n", iter);
         fmpz_t a;
         fmpz_poly_t f, g;
-        slong i;
         int s1, s2;
 
         fmpz_init(a);
         fmpz_poly_init(f);
         fmpz_poly_init(g);
 
-        
+         
         fmpz_one(a);
-        printf("AA\n");
         fmpz_poly_randtest(f, state, n_randint(state, 100), 200);
-        printf("BB\n");
-        /* s1 = fmpz_poly_solve_sgn_eval_at_c(f, a); */
-        printf("CC\n");
-        /* fmpz_poly_set(g, f); */
-        /* d = fmpz_poly_degree(g); */
-        /* for (i = 0; i <= d; i++) */
-        /* { */
-        /*     fmpz_mul_2exp(fmpz_poly_get_coeff_ptr(g, i), */
-        /*                   fmpz_poly_get_coeff_ptr(g, i), d - i); */
-        /* } */
+        s1 = fmpz_poly_solve_sgn_eval_at_c(f, a);
 
+        fmpz_poly_evaluate_fmpz(a, g, a);
 
-        /* fmpz_poly_evaluate_fmpz(a, g, a);
-
-        //s2 = fmpz_sgn(a);v*/
+        s2 = fmpz_sgn(a);
         s2=s1;
-        printf("s1 = %d, s2 = %d\n\n", s1, s2);
         if (s1 != s2)
         {
-
-          flint_printf("FAIL:\n");
-          
-          fmpz_poly_print(f); printf("\n\n");
-          printf("s1 = %d, s2 = %d\n\n", s1, s2);
-          abort();
+            flint_printf("FAIL:\n");       
+            fmpz_poly_print(f); printf("\n\n");
+            printf("s1 = %d, s2 = %d\n\n", s1, s2);
+            abort();
         }
 
 
