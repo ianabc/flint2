@@ -33,7 +33,7 @@ main(void)
         fmpz_poly_init(f);
         fmpz_poly_init(g);
 
-        
+         
         fmpz_one(a);
         fmpz_poly_randtest(f, state, n_randint(state, 100), 200);
         s1 = fmpz_poly_solve_sgn_eval_at_c(f, a);
