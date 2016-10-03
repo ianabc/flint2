@@ -39,8 +39,17 @@
    
    FLINT_DLL int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P,
                                                     const fmpz_t c,
-                                                    long k);
+                                                    slong k);
+   
+   FLINT_DLL int fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F);
 
+   FLINT_DLL int fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k);
+
+   
+   FLINT_DLL slong fmpz_poly_solve_root_upper_bound_2exp(const fmpz_poly_t F);
+   FLINT_DLL slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F);
+
+   FLINT_DLL long fmpz_poly_solve_var(const fmpz_poly_t f);
 
    
 #if 0
