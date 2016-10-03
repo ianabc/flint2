@@ -11,18 +11,22 @@
 
 #include "fmpz_poly_solve.h"
 
-int fmpz_poly_solve_sgn_eval_at_c(const fmpz_poly_t P, const fmpz_t c)
+
+
+/* computes the number of sign variations */
+
+long fmpz_poly_solve_var(const fmpz_poly_t f)
 {
-    fmpz_t r;
-    slong s;
+	long i, j;
+    long v = 0;
+    long d = fmpz_poly_degree(f);
 
-    fmpz_init(r);
-    
-    fmpz_poly_evaluate_fmpz(r, P, c);
-    s = fmpz_sgn(r);
-
-    fmpz_clear(r);
-
-    return s;
+    j = 0;
+    for ( i=1; i <= d; ++i) {
+    	if ( fmpz_sgn(fmpz_poly_get_coeff_ptr(f, i)) * fmpz_sgn(fmpz_poly_get_coeff_ptr(f, j)) < 0 ) {
+    		++v;
+    		j = i;
+    	}
+    }
+    return v;
 }
-

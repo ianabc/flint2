@@ -19,38 +19,37 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("sgn_eval_at_c....");
+    flint_printf("scale_2exp ....");
     fflush(stdout);
 
     /* Check aliasing */
     for (iter = 0; iter < 1000 * flint_test_multiplier(); iter++) 
     {
-        fmpz_t c;
         fmpz_poly_t f, g;
-        int s1, s2;
+        slong k;
 
-        fmpz_init(c);
+        k = n_randint(state, 20);
+        
         fmpz_poly_init(f);
         fmpz_poly_init(g);
 
-        fmpz_randbits(c, state, 100); 
-        
+             
         fmpz_poly_randtest(f, state, n_randint(state, 100), 200);
-        s1 = fmpz_poly_solve_sgn_eval_at_c(f, c);
+        fmpz_poly_solve_remove_content_2exp(f);
+        fmpz_poly_set(g, f);
 
-        fmpz_poly_set(g, f);     
-        fmpz_poly_evaluate_fmpz(c, g, c);
-        s2 = fmpz_sgn(c);
+        fmpz_poly_solve_scale_2exp(f, k);
+        fmpz_poly_solve_scale_2exp(f, -k);
         
-        if (s1 != s2)
+        if ( !fmpz_poly_equal(f, g) )
         {
             flint_printf("FAIL:\n");       
             fmpz_poly_print(f); printf("\n\n");
-            printf("s1 = %d, s2 = %d\n\n", s1, s2);
+            printf("ERROR \n"); 
             abort();
         }
 
-        fmpz_clear(c);
+       
         fmpz_poly_clear(f);
         fmpz_poly_clear(g);
     }
