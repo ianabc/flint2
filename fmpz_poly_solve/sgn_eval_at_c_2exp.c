@@ -12,20 +12,25 @@
 #include "fmpz_poly_solve.h"
 
 
-int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P, const fmpz_t c, long k)
+int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P, const fmpz_t c, slong k)
 {
     fmpz_t r;
     fmpz_t y;
-    long j;
+    slong j;
     
-    long d = fmpz_poly_degree(P);
+    slong d = fmpz_poly_degree(P);
+
+    if (d < 0)   return 0;
+    if (d == 0)  return fmpz_sgn(fmpz_poly_get_coeff_ptr(P, 0));
+    
     fmpz_init_set_ui(r, 1);
     fmpz_init_set_ui(y, 1);
 
     /* fprintf(stderr, "c: ");mpz_out_str(stderr, 10, c); fprintf(stderr, " "); */
     /* debug("k %ld", k); */
     
-    if (k <= 0) {
+    if (k <= 0)
+    {
         j = fmpz_poly_solve_sgn_eval_at_c(P, c);
         fmpz_clear(r);
         fmpz_clear(y);
@@ -33,7 +38,8 @@ int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P, const fmpz_t c, long
     }
 
     fmpz_mul(r, fmpz_poly_get_coeff_ptr(P, d), c);
-    for (j = d-1; j >= 1; j--) {    
+    for (j = d-1; j >= 1; j--)
+    {    
         fmpz_mul_2exp(y, fmpz_poly_get_coeff_ptr(P, j), (d-j)*k);
         fmpz_add(r, r, y);
         fmpz_mul(r, r, c);
