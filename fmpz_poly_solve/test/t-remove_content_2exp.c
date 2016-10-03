@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("remove_content_2exp ....");
+    flint_printf("remove_content_2exp.... ");
     fflush(stdout);
 
     /* Check aliasing */

@@ -158,8 +158,8 @@ struct slv_info
     ulong   nb_pos_hack_1;
     ulong   nb_pos_hack_2;
 
-    ulong 	t_dg;       /* The degree of the input */
-    ulong 	dg;         /* The current degree. It might not be equal
+    slong 	t_dg;       /* The degree of the input */
+    slong 	dg;         /* The current degree. It might not be equal
                            to the t_dg if we find a rational root
                            in the process of isolation  */
 
@@ -217,6 +217,7 @@ FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
                         fmpz_bintvl_t* vec_bintvl,
                         slv_info_ptr info);
 
+   
 
 
    FLINT_DLL int fmpz_poly_solve_sgn_eval_at_half(const fmpz_poly_t P);
@@ -236,40 +237,15 @@ FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
 
    FLINT_DLL long fmpz_poly_solve_var(const fmpz_poly_t f);
 
-   
-#if 0
-   FLINT_DLL void fmpz_poly_solve_init(fmpz_poly_solve_t fac);
+   FLINT_DLL
+   fmpz_bintvl_t* fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info);
 
-FLINT_DLL void fmpz_poly_solve_init2(fmpz_poly_solve_t fac, slong alloc);
+   FLINT_DLL
+   void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
+                                   fmpz_bintvl_t* roots, 
+                                   slv_info_ptr info);
 
-FLINT_DLL void fmpz_poly_solve_realloc(fmpz_poly_solve_t fac, slong alloc);
 
-FLINT_DLL void fmpz_poly_solve_fit_length(fmpz_poly_solve_t fac, slong len);
-
-FLINT_DLL void fmpz_poly_solve_clear(fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_set(fmpz_poly_solve_t res, const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_insert(fmpz_poly_solve_t fac, 
-                             const fmpz_poly_t p, slong exp);
-
-FLINT_DLL void fmpz_poly_solve_concat(fmpz_poly_solve_t res, 
-                             const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_print(const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_zassenhaus_recombination(fmpz_poly_solve_t final_fac, 
-	const fmpz_poly_solve_t lifted_fac, 
-    const fmpz_poly_t F, const fmpz_t P, slong exp);
-    
-FLINT_DLL void fmpz_poly_solve_squarefree(fmpz_poly_solve_t fac, const fmpz_poly_t F);
-
-FLINT_DLL void _fmpz_poly_solve_zassenhaus(fmpz_poly_solve_t final_fac, 
-								  slong exp, const fmpz_poly_t f, slong cutoff);
-
-FLINT_DLL void fmpz_poly_solve_zassenhaus(fmpz_poly_solve_t fac, const fmpz_poly_t G);
-
-#endif /* if 0 */
    
 #ifdef __cplusplus
 }

@@ -13,9 +13,9 @@
 
 int fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F)
 {
-    
-	unsigned long cont, i, z;
-    long deg = fmpz_poly_degree(F);
+
+    ulong cont, i, z;
+    slong deg = fmpz_poly_degree(F);
 
     if (deg < 0) return 0;
 	i = 0; while ( fmpz_sgn(fmpz_poly_get_coeff_ptr(F, i)) == 0 ) i++;
