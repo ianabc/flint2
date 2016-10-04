@@ -229,22 +229,22 @@ FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
    
    FLINT_DLL slong fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F);
 
-   FLINT_DLL int fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k);
+   FLINT_DLL slong fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k);
 
    
    FLINT_DLL slong fmpz_poly_solve_root_upper_bound_2exp(const fmpz_poly_t F);
    FLINT_DLL slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F);
 
-   FLINT_DLL long fmpz_poly_solve_var(const fmpz_poly_t f);
+   FLINT_DLL slong fmpz_poly_solve_var(const fmpz_poly_t f);
 
    FLINT_DLL
    fmpz_bintvl_t* fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info);
 
-   FLINT_DLL
-   void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
-                                   fmpz_bintvl_t* roots, 
-                                   slv_info_ptr info);
-
+     FLINT_DLL
+     void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
+                                          fmpz_bintvl_t* roots, 
+                                          slv_info_ptr info);
+     
 
    
 #ifdef __cplusplus

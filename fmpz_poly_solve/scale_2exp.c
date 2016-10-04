@@ -35,7 +35,7 @@ void __fmpz_poly_solve_scale_2exp_neg(fmpz_poly_t F, slong k)
 }
 
 
-int fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k)
+slong  fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k)
 {
     slong deg;
     slong i, p;
