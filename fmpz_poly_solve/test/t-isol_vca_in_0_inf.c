@@ -41,15 +41,15 @@ main(void)
             continue;
        }
         
-         printf("f: "); fmpz_poly_print(f); printf("\n\n"); 
-         fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
-         
+        /* printf("\nf: "); fmpz_poly_print(f); printf("\n\n");  */
+        fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
+        
         /* Isolate the roots using VCA */
-         fmpz_poly_solve_isol_vca_in_0_inf( f, info); 
+        fmpz_poly_solve_isol_vca_in_0_inf( f, info); 
                 
         
-        /* print_roots_all(stdout, roots, info->nb_roots); */
-        
+        /*print_roots_all(stdout, roots, info->nb_roots); */
+         
         slv_info_print(info); 
         	
         /*

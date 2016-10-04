@@ -117,7 +117,7 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
                                      fmpz_bintvl_t* roots, 
                                      slv_info_ptr info)
 {
-
+    printf("FF: "); fmpz_poly_print(FF); printf("\n\n"); 
     long V;
     long k = 0;
     
@@ -224,7 +224,7 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
             break;
 
         case 1:
-            /* verb_info("Found 1 root!") */
+            printf("Found 1 root!");
             fmpz_bintvl_new_root(roots, I, info);
             info->nb_roots++;
 

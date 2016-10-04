@@ -16,7 +16,7 @@
 
 fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info)
 {
-    
+
   //info->dg = fmpz_poly_degree(A);
     fmpz_bintvl_t* roots = (fmpz_bintvl_t*) malloc(info->dg * sizeof(fmpz_bintvl_t)); 
 
@@ -31,11 +31,13 @@ fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_
 
 	long k = fmpz_poly_solve_root_upper_bound_2exp(F);
     info->bd = k;
-            
+
+   
     /* Put the roots in (0, 1) */
 	fmpz_poly_solve_scale_2exp(F, k);
   
-
+    /* printf("(inf) f: "); fmpz_poly_print(F); printf("\n\n"); */
+    
     /* Isolate the real roots in (0, 1) */
     fmpz_poly_solve_isol_vca_in_0_1(F, roots, info); 
     
