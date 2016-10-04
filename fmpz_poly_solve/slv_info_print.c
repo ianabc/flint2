@@ -16,7 +16,7 @@ void slv_info_print(slv_info_srcptr info)
     printf("/*------------------------------------------------------------*/\n");
     printf("  Statistics: \n");
 
-    printf( "  #degree : %3lu \n", info->dg);
+    printf( "  #degree : %3lu \n", info->t_dg);
     printf( "  #bound  : %3lu \n", info->bd);
     
     printf( "  #roots  : %3lu \n", info->nb_roots);

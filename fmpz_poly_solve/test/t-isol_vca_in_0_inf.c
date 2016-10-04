@@ -28,7 +28,7 @@ main(void)
 #if 0
         FILE *file_in = stdin;    
         
-        char fname[] = "/Users/elias/ET/et-soft/data/L100.dat";
+        char fname[] = "/Users/elias/ET/et-soft/data/rat-5.dat";
         file_in = fopen(fname, "r");
         
         fmpz_poly_t F;
@@ -68,22 +68,22 @@ main(void)
 #endif
         
 #if 1
+
+        printf("=====================================================\n");
         fmpz_poly_t f;
         fmpz_t b;
         slong k, m;
         slong  i;
         fmpz_poly_t h;
-        fmpz_poly_factor_t fac;
                 
         fmpz_init(b);
         
         fmpz_poly_init(f);
         fmpz_poly_set_coeff_si(f, 0, 1);
         fmpz_poly_init(h);
-        fmpz_poly_factor_init(fac);
                 
         m = WORD_MIN;
-        for(i = 1; i <= 10; i++)
+        for(i = 1; i <= 5; i++)
         {
             k = n_randint(state, 101);
             fmpz_poly_set_coeff_si(h, 1, k);
@@ -93,18 +93,25 @@ main(void)
         }
         fmpz_poly_solve_remove_content_2exp(f);
         
-        fmpz_poly_factor_squarefree(fac, f);
-        fmpz_poly_set(h, fac->p);
+        fmpz_poly_derivative(h, f);
+        fmpz_poly_gcd(h, f, h);
+        ulong  dd;
+        fmpz_poly_pseudo_div(h, &dd, f, h);
+                
+        /* printf("\nfac:= "); fmpz_poly_print(h); printf(";\n\n");  */
+        /* printf("\nfac:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n");  */
+                
         
         
         slv_info_t info;
         slv_info_init(info);
 
         info->dg = fmpz_poly_degree(h);
+        info->t_dg = fmpz_poly_degree(h);
+        
         /* flint_printf("dg = %wd \n", info->dg);   */
-        if (info->dg <= 2)
+        if (info->t_dg <= 2)
         {
-            fmpz_poly_factor_clear(fac);
                     
             fmpz_poly_clear(f);
             fmpz_poly_clear(h);
@@ -122,9 +129,10 @@ main(void)
          
         slv_info_print(info); 
 
-        flint_printf("r: %wd \t %wd \n", info->nb_roots, info->dg);
+        /* printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n");  */
+        /* flint_printf("r: %wd \t %wd \n", info->nb_roots, info->dg); */
         
-        if ( info->nb_roots > info->dg )
+        if ( info->nb_roots > info->t_dg )
         {
             flint_printf("FAIL:\n");
             printf("\nf:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n"); 
@@ -133,10 +141,8 @@ main(void)
             abort();
         }
         
-
-        //flint_free(roots);
-        fmpz_poly_factor_clear(fac);
-        
+        flint_free(roots);
+                
         fmpz_poly_clear(f);
         fmpz_poly_clear(h);
 #endif
