@@ -23,12 +23,12 @@ main(void)
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 10; iter++) /*1000 * flint_test_multiplier(); iter++)  */
+    for (iter = 0; iter < 10; iter++)  /* 1000 * flint_test_multiplier(); iter++)   */
     {
 #if 0
         FILE *file_in = stdin;    
         
-        char fname[] = "/Users/elias/ET/et-soft/data/rat-5.dat";
+        char fname[] = "/Users/elias/ET/et-soft/data/e01.dat";
         file_in = fopen(fname, "r");
         
         fmpz_poly_t F;
@@ -42,7 +42,7 @@ main(void)
         
         info->dg = fmpz_poly_degree(F);
         /* flint_printf("dg = %wd \n", info->dg);   */
-        if (info->dg <= 2)
+        if (info->dg <= 1)
         {
             fmpz_poly_clear(F);
             continue;
@@ -83,7 +83,7 @@ main(void)
         fmpz_poly_init(h);
                 
         m = WORD_MIN;
-        for(i = 1; i <= 5; i++)
+        for(i = 1; i <= 10; i++)
         {
             k = n_randint(state, 101);
             fmpz_poly_set_coeff_si(h, 1, k);
@@ -92,10 +92,20 @@ main(void)
             fmpz_poly_mul(f, f, h);
         }
         fmpz_poly_solve_remove_content_2exp(f);
+
+        if (fmpz_poly_degree(f) <= 1)
+        {
+            fmpz_poly_clear(f);
+            fmpz_poly_clear(h);
+            continue;
+        }
+        
         
         fmpz_poly_derivative(h, f);
         fmpz_poly_gcd(h, f, h);
         ulong  dd;
+        printf("\nfac:= "); fmpz_poly_print_pretty(f, "T"); printf(";\n\n");  
+        printf("\nfac:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n"); 
         fmpz_poly_pseudo_div(h, &dd, f, h);
                 
         /* printf("\nfac:= "); fmpz_poly_print(h); printf(";\n\n");  */
@@ -129,10 +139,10 @@ main(void)
          
         slv_info_print(info); 
 
-        /* printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n");  */
-        /* flint_printf("r: %wd \t %wd \n", info->nb_roots, info->dg); */
+        printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n");
+        flint_printf("rr: %wd \t %wd \n", info->nb_roots, info->t_dg);
         
-        if ( info->nb_roots > info->t_dg )
+        if ( info->nb_roots < info->t_dg )
         {
             flint_printf("FAIL:\n");
             printf("\nf:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n"); 
@@ -146,7 +156,6 @@ main(void)
         fmpz_poly_clear(f);
         fmpz_poly_clear(h);
 #endif
-
     }
 
     FLINT_TEST_CLEANUP(state);

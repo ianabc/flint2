@@ -28,6 +28,8 @@ void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z)
 
 	fmpz_init_set(c1, z->c);
 
+    
+    
 	if (z->k <= 0){
 		/* mpz_out_str(stream, 10, z->c);  */
 	} else {
@@ -43,13 +45,27 @@ void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z)
 		k2 = z->k;
 	}
 
-	fprintf(stream, "%10.5f  ~  ", fmpz_bintvl_get_mid_d(z));
-	fprintf(stream, "(");
-    fmpz_fprint(stream, c1); fprintf(stream, "/2^%ld", k1);
-	fprintf(stream, ", ");
-    fmpz_fprint(stream, c2); fprintf(stream, "/2^%ld", k2);
-	fprintf(stream, ")");
-
+    if (z->is_exact)
+    {
+        fprintf(stream, "%10.5f  ~  ", 0);
+        fprintf(stream, "(");
+        fmpz_fprint(stream, c1); fprintf(stream, "/2^%ld", k1);
+        fprintf(stream, ", ");
+        fmpz_fprint(stream, c1); fprintf(stream, "/2^%ld", k2);
+        fprintf(stream, ")");
+    }
+    else
+    {
+        fprintf(stream, "%10.5f  ~  ", fmpz_bintvl_get_mid_d(z));
+        fprintf(stream, "(");
+        fmpz_fprint(stream, c1); fprintf(stream, "/2^%ld", k1);
+        fprintf(stream, ", ");
+        fmpz_fprint(stream, c2); fprintf(stream, "/2^%ld", k2);
+        fprintf(stream, ")");
+    }
+    fmpz_clear(c1);
+    fmpz_clear(c2);
+    
 	return ;
 }
 

@@ -24,7 +24,7 @@ int fmpz_poly_solve_is_zero_a_root(fmpz_poly_t P,
     if ( fmpz_cmp_ui(fmpz_poly_get_coeff_ptr(P, 0), 0) == 0 )
     {
         /* printf("\nP0:= "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n");  */
-        /* printf("\n\n 000 \n\n\n"); */
+         /* printf("\n\n 000 \n\n\n"); */
         fmpz_bintvl_init(I);
         I->is_exact = 1;
  

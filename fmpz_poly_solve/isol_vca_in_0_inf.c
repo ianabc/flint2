@@ -32,6 +32,7 @@ fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_
 
     /* printf("\nP2:= "); fmpz_poly_print_pretty(F, "T"); printf(";\n\n");  */
     /* Put the roots in (0, 1) */
+
 	fmpz_poly_solve_scale_2exp(F, k);
   
     /* printf("(inf) f: "); fmpz_poly_print(F); printf("\n\n"); */

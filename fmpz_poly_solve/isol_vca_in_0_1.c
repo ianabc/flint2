@@ -118,18 +118,20 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
                                      slv_info_ptr info)
 {
     /* printf("FF: "); fmpz_poly_print(FF); printf("\n\n");  */
-    long V;
-    long k = 0;
+    slong V;
+    slong k = 0;
     
     fmpz_t c;
     fmpz_t one;
     fmpz_one(one);
 
-    long status = 0;
-    long shalf= 1;
+    slong j;
+    slong status = 0;
+    slong shalf= 1;
  
-    long dg = fmpz_poly_degree(FF);
-    info->dg = dg; 
+    slong dg = fmpz_poly_degree(FF);
+    info->dg = dg;
+    info->t_dg = dg; 
 
     fmpz_lst_bintvl  queue;
 
@@ -144,6 +146,7 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     fmpz_poly_init2(Q, dg+1);
     fmpz_poly_set(Q, P);
 
+    /* printf("\nP := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n"); */
 
     V = fmpz_poly_solve_Descartes_test(P, Q, shalf, &status, info);
     if ( V == 0 )
@@ -167,6 +170,37 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
 
         return;
     }
+
+    /* the polynomial h(x) = 2*x -1 */
+    fmpz_poly_t h;
+    fmpz_poly_init2(h, 2);
+    fmpz_poly_set_coeff_si(h, 1, 2);
+    fmpz_poly_set_coeff_si(h, 0, -1);
+    ulong  dd;
+             
+    /* Check if 1/2 is a root */
+    /* printf("\nP := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n"); */
+    shalf = fmpz_poly_solve_sgn_eval_at_half(P);
+    /* flint_printf(" shalf: %wd \n", shalf); */
+    if (shalf == 0)
+    {
+        I = flint_malloc(sizeof(fmpz_bintvl_t));
+        fmpz_set_ui(I->c, 1);
+        I->k = 1;
+        I->is_exact = 1;
+        /* fmpz_bintvl_print(I); */
+        fmpz_bintvl_new_root(roots, I, info);
+        info->nb_roots++;
+        fmpz_bintvl_clear(I);
+        flint_free(I);
+        
+        fmpz_poly_pseudo_div(P, &dd, P, h);
+                     
+    }
+    /* printf("\nP := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n"); */
+    /* fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots);  */
+
+    
     /* The poly has more than one sign variations.
      * Split and initialize the queue.  */
     FLINT_SLIST_INIT(&queue);
@@ -189,7 +223,15 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     while ( (!FLINT_SLIST_EMPTY(&queue)) && info->max_depth <= 100000)
     {
         FLINT_SLIST_POP(queue, I);
+        /* printf("\nPr := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n");   */
+        /* printf("Q I "); fmpz_bintvl_print(I); */
+                     
         info->max_depth = FLINT_MAX(info->max_depth, I->k);
+
+         if (fmpz_sgn(fmpz_poly_get_coeff_ptr(P, 0)) == 0)
+         {
+             /* printf("ZERO ! \n"); */
+         }  
 
         /* Construct the polynomial depending on the previous k */
         if ( k < I->k ) {
@@ -203,16 +245,13 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
         } else if ( k > I->k ) {
             fmpz_poly_taylor_shift(P, P, one);
             //fmpz_poly_taylor_shift_by_1(P, P);
-            info->nb_trans++;
+           info->nb_trans++;
             fmpz_poly_solve_scale_2exp(P, k - (I->k));
             info->nb_homo++;
             k = I->k;
         }
 
-        if (fmpz_sgn(fmpz_poly_get_coeff_ptr(P, 0)) == 0)
-        {
-            printf("ZERO! \n");
-        }   
+        
         /*
           Compute the sign of P(1/2) ; 
           If # sign variations is 2  and  sign(P(0)) = sign(P(1)) = -sign(P(1/2)) 
@@ -222,8 +261,23 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
 
         if (shalf == 0 )
         {
-            printf("ZERO! \n");
+             
+            fmpz_bintvl_ptr J = flint_malloc(sizeof(fmpz_bintvl_t));
+            fmpz_bintvl_init_set(J, I);
+            J->k += 1;
+            fmpz_add_ui(J->c, J->c, 1);
+            J->is_exact = 1;
+            fmpz_bintvl_new_root(roots, J, info);
+            info->nb_roots++;
+            fmpz_bintvl_clear(J);
+            flint_free(J);
+
+            fmpz_poly_pseudo_div(P, &dd, P, h);
+            /* printf("\nP1 := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n");   */
+                    
+            shalf = fmpz_poly_solve_sgn_eval_at_half(P);
         }
+        
         V = fmpz_poly_solve_Descartes_test(P, Q, shalf, &status, info);
         // printf("V: %ld \n", V);
         switch ( V ) {
