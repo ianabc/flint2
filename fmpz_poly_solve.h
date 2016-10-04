@@ -213,10 +213,14 @@ FLINT_DLL void fmpz_bintvl_new_root(fmpz_bintvl_t* vec_bintvl,
                      fmpz_bintvl_srcptr I,
                      slv_info_ptr info);
 
-FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
-                        fmpz_bintvl_t* vec_bintvl,
-                        slv_info_ptr info);
-
+FLINT_DLL int fmpz_poly_solve_is_zero_a_root(fmpz_poly_t P,
+                                             fmpz_bintvl_t* vec_bintvl,
+                                             slv_info_ptr info);
+FLINT_DLL
+void fmpz_poly_solve_adjust_bintvl_signs(const fmpz_poly_t P,
+                                         fmpz_bintvl_t* roots,
+                                         slv_info_srcptr info);
+    
    
 
 
@@ -237,9 +241,9 @@ FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
 
    FLINT_DLL slong fmpz_poly_solve_var(const fmpz_poly_t f);
 
-   FLINT_DLL
-   fmpz_bintvl_t* fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info);
-
+     FLINT_DLL
+     fmpz_bintvl_t* fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info);
+     
      FLINT_DLL
      void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
                                           fmpz_bintvl_t* roots, 

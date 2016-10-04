@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("root_upper_bound_2exp ....");
+    flint_printf("root_upper_bound_2exp ... ");
     fflush(stdout);
 
     /* Check aliasing */
@@ -28,7 +28,7 @@ main(void)
         fmpz_poly_t f;
         fmpz_t b;
         slong k, m;
-        slong  i, j;
+        slong  i;
         fmpz_poly_t h;
         
         fmpz_init(b);
@@ -53,9 +53,9 @@ main(void)
         fmpz_init_set_ui(b, 1);
         fmpz_mul_2exp(b, b, k);
 
-        /* flint_printf("k: %wd \n", k); */
-        /* printf("\n Bounds: "); fmpz_print( b); printf(" \n");  */
-        if ( fmpz_cmp_ui(b, m) == 0 )
+        /* flint_printf("\n k: %wd \t %wd \n", k, m); */
+        /* flint_printf("\n Bounds: %wd \t", m); fmpz_print( b); printf(" \n"); */
+        if ( fmpz_cmp_si(b, m) < 0 )
         {
             flint_printf("FAIL:\n");       
             fmpz_poly_print(f); printf("\n\n");

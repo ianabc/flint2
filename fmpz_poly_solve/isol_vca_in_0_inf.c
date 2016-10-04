@@ -16,23 +16,20 @@
 
 fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info)
 {
-
   //info->dg = fmpz_poly_degree(A);
     fmpz_bintvl_t* roots = (fmpz_bintvl_t*) malloc(info->dg * sizeof(fmpz_bintvl_t)); 
-
 
     fmpz_poly_t F;
     fmpz_poly_init(F);
     fmpz_poly_set(F, A);
 
-    
 
-    /* slv_is_zero_a_root(F, roots, info_pos); */
+    /* Check if 0 is a root of the polynomial, and reduce its degree */
+    fmpz_poly_solve_is_zero_a_root(F, roots, info); 
 
-	long k = fmpz_poly_solve_root_upper_bound_2exp(F);
+    long k = fmpz_poly_solve_root_upper_bound_2exp(F);
     info->bd = k;
-
-   
+    
     /* Put the roots in (0, 1) */
 	fmpz_poly_solve_scale_2exp(F, k);
   
@@ -45,7 +42,7 @@ fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_
     fmpz_poly_clear(F);
     
     /* Compute the sign of the poly at the left endpoint of the isolating interval */
-    /*     slv_adjust_signs(A, roots, info); */
+    fmpz_poly_solve_adjust_bintvl_signs(A, roots, info); 
 
 	//printf( "Finish isolating \n");
     return roots;
