@@ -69,13 +69,14 @@ main(void)
         
 #if 1
 
-        printf("=====================================================\n");
+  
         fmpz_poly_t f;
         fmpz_t b;
         slong k, m;
         slong  i;
         fmpz_poly_t h;
-                
+        ulong dd;
+        
         fmpz_init(b);
         
         fmpz_poly_init(f);
@@ -103,9 +104,8 @@ main(void)
         
         fmpz_poly_derivative(h, f);
         fmpz_poly_gcd(h, f, h);
-        ulong  dd;
-        printf("\nfac:= "); fmpz_poly_print_pretty(f, "T"); printf(";\n\n");  
-        printf("\nfac:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n"); 
+        /* printf("\nfac:= "); fmpz_poly_print_pretty(f, "T"); printf(";\n\n");   */
+        /* printf("\nfac:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n");  */
         fmpz_poly_pseudo_div(h, &dd, f, h);
                 
         /* printf("\nfac:= "); fmpz_poly_print(h); printf(";\n\n");  */
@@ -135,12 +135,11 @@ main(void)
         roots = fmpz_poly_solve_isol_vca_in_0_inf(h, info); 
                 
         
-        fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots); 
-         
-        slv_info_print(info); 
+        /* fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots);         */
+        /* slv_info_print(info);  */
 
-        printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n");
-        flint_printf("rr: %wd \t %wd \n", info->nb_roots, info->t_dg);
+        /* printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n"); */
+        /* flint_printf("rr: %wd \t %wd \n", info->nb_roots, info->t_dg); */
         
         if ( info->nb_roots < info->t_dg )
         {
