@@ -34,10 +34,34 @@ void __fmpz_poly_solve_scale_2exp_neg(fmpz_poly_t F, slong k)
    	return;
 }
 
+
 int fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k)
 {
+    slong deg;
+    slong i, p;
+
+    deg = fmpz_poly_degree(F);
+    
     if (fmpz_poly_degree(F) <= 0) return 0;
-    (k > 0 ? __fmpz_poly_solve_scale_2exp_pos(F, k) : __fmpz_poly_solve_scale_2exp_neg(F, k));
-	return fmpz_poly_solve_remove_content_2exp(F);
+
+    if (k > 0)
+    {
+        p = k;
+        for (i = 1; i <= deg; i++, p += k)
+        {
+            fmpz_mul_2exp(fmpz_poly_get_coeff_ptr(F, i), fmpz_poly_get_coeff_ptr(F, i), p);
+        }
+    }
+    else
+    {
+        p = deg * (-k);
+        for ( i = 0; i < deg ; i++, p += k )
+        {
+            fmpz_mul_2exp(fmpz_poly_get_coeff_ptr(F, i), fmpz_poly_get_coeff_ptr(F, i), p);
+        }
+    }
+    return fmpz_poly_solve_remove_content_2exp(F);
 }
+
+
 

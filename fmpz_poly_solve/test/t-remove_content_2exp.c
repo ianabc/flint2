@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("remove_content_2exp.... ");
+    flint_printf("remove_content_2exp ... ");
     fflush(stdout);
 
     /* Check aliasing */
@@ -27,18 +27,16 @@ main(void)
     {
         fmpz_poly_t f, g;
         slong i, d, k;
-
-        k = n_randint(state, 20);
         
         fmpz_poly_init(f);
         fmpz_poly_init(g);
 
-             
         fmpz_poly_randtest(f, state, n_randint(state, 100), 200);
         fmpz_poly_solve_remove_content_2exp(f);
         fmpz_poly_set(g, f);
 
         d = fmpz_poly_degree(f);
+        k = n_randint(state, 100);
         for (i = 0; i <= d; i++)
         {
             fmpz_mul_2exp(fmpz_poly_get_coeff_ptr(f, i),
@@ -55,8 +53,7 @@ main(void)
             printf("ERROR \n"); 
             abort();
         }
-
-       
+    
         fmpz_poly_clear(f);
         fmpz_poly_clear(g);
     }

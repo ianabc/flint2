@@ -11,8 +11,9 @@
 
 #include "fmpz_poly_solve.h"
 
-void fmpz_bintvl_new_root(fmpz_bintvl_t * roots, fmpz_bintvl_srcptr I,
-        slv_info_ptr info)
+void fmpz_bintvl_new_root(fmpz_bintvl_t * roots,
+                          fmpz_bintvl_srcptr I,
+                          slv_info_ptr info)
 {
     int b;
     int j;
@@ -23,10 +24,6 @@ void fmpz_bintvl_new_root(fmpz_bintvl_t * roots, fmpz_bintvl_srcptr I,
     fmpz_init_set(c, I->c);
     k = I->k;
     j = info->nb_roots;  /** The current root */
-    b = info->bd; 
-
-    /* debug("#roots: %lu", info->nb_roots); */
-    /* debug("\t sign: %d  \t b: %d  \t k: %d", sign, b, k); */
 
     roots[j]->sign = info->sign;
     fmpz_init(roots[j]->c);

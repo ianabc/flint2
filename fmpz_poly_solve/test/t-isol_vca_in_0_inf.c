@@ -23,7 +23,7 @@ main(void)
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 10; iter++) //1000 * flint_test_multiplier(); iter++) 
+    for (iter = 0; iter < 3; iter++) //1000 * flint_test_multiplier(); iter++) 
     {
         fmpz_poly_t f;
         
@@ -36,16 +36,17 @@ main(void)
         
         info->dg = fmpz_poly_degree(f);
         /* flint_printf("dg = %wd \n", info->dg);   */
-        if (info->dg <= 2) {
+        if (info->dg <= 2)
+        {
             fmpz_poly_clear(f);
             continue;
-       }
+        }
         
         /* printf("\nf: "); fmpz_poly_print(f); printf("\n\n");  */
         fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
         
         /* Isolate the roots using VCA */
-        fmpz_poly_solve_isol_vca_in_0_inf( f, info); 
+        roots = fmpz_poly_solve_isol_vca_in_0_inf(f, info); 
                 
         
         /*print_roots_all(stdout, roots, info->nb_roots); */

@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("scale_2exp ....");
+    flint_printf("scale_2exp ... ");
     fflush(stdout);
 
     /* Check aliasing */
@@ -28,7 +28,7 @@ main(void)
         fmpz_poly_t f, g;
         slong k;
 
-        k = n_randint(state, 20);
+        k = n_randint(state, 200);
         
         fmpz_poly_init(f);
         fmpz_poly_init(g);

@@ -11,7 +11,7 @@
 
 #include "fmpz_poly_solve.h"
 
-/* Returns the sign of F(1/2) */
+/* Returns the sign of P(1/2) */
 int fmpz_poly_solve_sgn_eval_at_half (const fmpz_poly_t P)
 {
 	slong j, p;
@@ -30,8 +30,9 @@ int fmpz_poly_solve_sgn_eval_at_half (const fmpz_poly_t P)
 		fmpz_add(x, x, y);
 	}
 
-	fmpz_clear(y);
 	ret = fmpz_sgn(x);
+
 	fmpz_clear(x);
-	return ret;
+	fmpz_clear(y);
+    return ret;
 }

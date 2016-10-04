@@ -150,13 +150,13 @@ struct { \
 
 struct slv_info
 {
-    ulong 	max_depth;
-    ulong 	nb_nodes;
-    ulong	nb_homo;
-    ulong 	nb_trans;
-    ulong 	nb_half_opt;
-    ulong   nb_pos_hack_1;
-    ulong   nb_pos_hack_2;
+    slong 	max_depth;
+    slong 	nb_nodes;
+    slong	nb_homo;
+    slong 	nb_trans;
+    slong 	nb_half_opt;
+    slong   nb_pos_hack_1;
+    slong   nb_pos_hack_2;
 
     slong 	t_dg;       /* The degree of the input */
     slong 	dg;         /* The current degree. It might not be equal
@@ -165,7 +165,7 @@ struct slv_info
 
     int     sign;       /* -1 if we solve for negative roots */
     slong   bd;         /* The root bound is 2^{bd} */
-    ulong   nb_roots;   /* THe number of roots */
+    slong   nb_roots;   /* The number of roots */
 };
 
 typedef struct slv_info slv_info_t[1];
@@ -227,7 +227,7 @@ FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
                                                     const fmpz_t c,
                                                     slong k);
    
-   FLINT_DLL int fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F);
+   FLINT_DLL slong fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F);
 
    FLINT_DLL int fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k);
 

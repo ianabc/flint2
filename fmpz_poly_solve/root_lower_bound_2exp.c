@@ -16,7 +16,7 @@
 
 slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F)
 {
-    long q1, q2, p, i, j;
+    slong q1, q2, p, i, j;
     slong d = fmpz_poly_degree(F);
 
     if (d <= 0) return 0;
