@@ -146,16 +146,16 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
 
 
     V = fmpz_poly_solve_Descartes_test(P, Q, shalf, &status, info);
-    if ( V == 0 ) {
+    if ( V == 0 )
+    {
         /* TODO: clear the memory */
         fmpz_poly_clear(P);
         fmpz_poly_clear(Q);
 
         return ;
     }
-    if ( V == 1 ) {
-		
-
+    if ( V == 1 )
+    {
         I = flint_malloc(sizeof(fmpz_bintvl_t));
         fmpz_bintvl_init(I);
         fmpz_bintvl_new_root(roots, I, info);
@@ -186,7 +186,8 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
 
     k = 0;
     fmpz_init_set_ui(c, 0);
-    while ( (!FLINT_SLIST_EMPTY(&queue)) && info->max_depth <= 100000)  {
+    while ( (!FLINT_SLIST_EMPTY(&queue)) && info->max_depth <= 100000)
+    {
         FLINT_SLIST_POP(queue, I);
         info->max_depth = FLINT_MAX(info->max_depth, I->k);
 
@@ -208,6 +209,10 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
             k = I->k;
         }
 
+        if (fmpz_sgn(fmpz_poly_get_coeff_ptr(P, 0)) == 0)
+        {
+            printf("ZERO! \n");
+        }   
         /*
           Compute the sign of P(1/2) ; 
           If # sign variations is 2  and  sign(P(0)) = sign(P(1)) = -sign(P(1/2)) 
@@ -215,6 +220,10 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
         */
         shalf = fmpz_poly_solve_sgn_eval_at_half(P);
 
+        if (shalf == 0 )
+        {
+            printf("ZERO! \n");
+        }
         V = fmpz_poly_solve_Descartes_test(P, Q, shalf, &status, info);
         // printf("V: %ld \n", V);
         switch ( V ) {

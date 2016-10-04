@@ -248,8 +248,17 @@ void fmpz_poly_solve_adjust_bintvl_signs(const fmpz_poly_t P,
      void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
                                           fmpz_bintvl_t* roots, 
                                           slv_info_ptr info);
-     
+/* It assumes tha the first number in the file is the degree 
+   and NOT the length */
+     FLINT_DLL
+     int fmpz_poly_fread2(FILE * file, fmpz_poly_t poly);
 
+FLINT_DLL
+void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z);
+
+FLINT_DLL
+void fmpz_poly_solve_print_all_roots(FILE* stream, fmpz_bintvl_t* roots, slong nbr);
+     
    
 #ifdef __cplusplus
 }

@@ -19,26 +19,32 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("isol_vca_in_0_inf ....");
+    flint_printf("isol_vca_in_0_inf ... ");
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 3; iter++) //1000 * flint_test_multiplier(); iter++) 
+    for (iter = 0; iter < 10; iter++) /*1000 * flint_test_multiplier(); iter++)  */
     {
-        fmpz_poly_t f;
+#if 0
+        FILE *file_in = stdin;    
         
-        fmpz_poly_init(f);
-        fmpz_poly_randtest(f, state, n_randint(state, 50), 20);
+        char fname[] = "/Users/elias/ET/et-soft/data/L100.dat";
+        file_in = fopen(fname, "r");
+        
+        fmpz_poly_t F;
+        fmpz_poly_init(F);
+        fmpz_poly_fread2(file_in, F);
+        fmpz_poly_print_pretty(F, "T"); flint_printf("\n");
 
-        /* info */
+/* info */
         slv_info_t info;
         slv_info_init(info);
         
-        info->dg = fmpz_poly_degree(f);
+        info->dg = fmpz_poly_degree(F);
         /* flint_printf("dg = %wd \n", info->dg);   */
         if (info->dg <= 2)
         {
-            fmpz_poly_clear(f);
+            fmpz_poly_clear(F);
             continue;
         }
         
@@ -46,26 +52,95 @@ main(void)
         fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
         
         /* Isolate the roots using VCA */
-        roots = fmpz_poly_solve_isol_vca_in_0_inf(f, info); 
+        roots = fmpz_poly_solve_isol_vca_in_0_inf(F, info); 
                 
-        
-        /*print_roots_all(stdout, roots, info->nb_roots); */
+        fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots); 
+             
          
         slv_info_print(info); 
-        	
-        /*
-        if ( !fmpz_poly_equal(f, g) )
+        
+
+        fclose(file_in);
+        
+        fmpz_poly_clear(F);
+    
+        continue;
+#endif
+        
+#if 1
+        fmpz_poly_t f;
+        fmpz_t b;
+        slong k, m;
+        slong  i;
+        fmpz_poly_t h;
+        fmpz_poly_factor_t fac;
+                
+        fmpz_init(b);
+        
+        fmpz_poly_init(f);
+        fmpz_poly_set_coeff_si(f, 0, 1);
+        fmpz_poly_init(h);
+        fmpz_poly_factor_init(fac);
+                
+        m = WORD_MIN;
+        for(i = 1; i <= 10; i++)
         {
-            flint_printf("FAIL:\n");       
-            fmpz_poly_print(f); printf("\n\n");
+            k = n_randint(state, 101);
+            fmpz_poly_set_coeff_si(h, 1, k);
+            k = n_randint(state, 102);
+            fmpz_poly_set_coeff_si(h, 0, -k);
+            fmpz_poly_mul(f, f, h);
+        }
+        fmpz_poly_solve_remove_content_2exp(f);
+        
+        fmpz_poly_factor_squarefree(fac, f);
+        fmpz_poly_set(h, fac->p);
+        
+        
+        slv_info_t info;
+        slv_info_init(info);
+
+        info->dg = fmpz_poly_degree(h);
+        /* flint_printf("dg = %wd \n", info->dg);   */
+        if (info->dg <= 2)
+        {
+            fmpz_poly_factor_clear(fac);
+                    
+            fmpz_poly_clear(f);
+            fmpz_poly_clear(h);
+            continue;
+        }
+
+        /* printf("\nf: "); fmpz_poly_print(f); printf("\n\n");  */
+        fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
+        
+        /* Isolate the roots using VCA */
+        roots = fmpz_poly_solve_isol_vca_in_0_inf(h, info); 
+                
+        
+        fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots); 
+         
+        slv_info_print(info); 
+
+        flint_printf("r: %wd \t %wd \n", info->nb_roots, info->dg);
+        
+        if ( info->nb_roots > info->dg )
+        {
+            flint_printf("FAIL:\n");
+            printf("\nf:= "); fmpz_poly_print_pretty(h, "T"); printf(";\n\n"); 
+            /* fmpz_poly_print(f); printf("\n\n"); */
             printf("ERROR \n"); 
             abort();
         }
-        */
+        
 
         //flint_free(roots);
-
+        fmpz_poly_factor_clear(fac);
+        
         fmpz_poly_clear(f);
+        fmpz_poly_clear(h);
+#endif
+
     }
 
     FLINT_TEST_CLEANUP(state);

@@ -46,6 +46,5 @@ fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_
 
 	//printf( "Finish isolating \n");
     return roots;
-    /*	return roots; */
 }
 
