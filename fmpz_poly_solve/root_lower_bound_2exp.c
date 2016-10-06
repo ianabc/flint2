@@ -18,20 +18,19 @@ slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F)
     const fmpz * f;
 
     len = F->length;
-
     if (len == 0)
         return 0;
 
     d = len - 1;
     f = F->coeffs;
-    
+
     a0_sgn = fmpz_sgn(f + 0);
 
     q1 = WORD_MIN;
     for (i = d; i > 0; i--)
     {
-        if ((fmpz_sgn(f + i) == a0_sgn) || 
-            (fmpz_sgn(f + i)  == 0) ) continue;
+        if ((fmpz_sgn(f + i) == a0_sgn) || (fmpz_sgn(f + i)  == 0))
+            continue;
 
         q2 = WORD_MAX;
         for (j = i - 1; j >= 0; j--)
@@ -40,7 +39,7 @@ slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F)
                 continue;
 
             p = fmpz_bits(f + i) - fmpz_bits(f + j) - 1;
-            q2 = FLINT_MIN(q2, p/(i-j) +2);
+            q2 = FLINT_MIN(q2, p/(i-j) + 2);
         }
 
         q1 = FLINT_MAX(q1, q2);

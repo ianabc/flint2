@@ -11,36 +11,42 @@
 
 #include "fmpz_poly_solve.h"
 
-/* #define fmpz_bitsize(a) fmpz_sizeinbase((a), 2) */
-
 slong fmpz_poly_solve_root_upper_bound_2exp(const fmpz_poly_t F)
 {
-	slong q1, q2, p, i, j;
+    slong q1, q2, p, i, j, d, len, ad_sgn;
+    const fmpz * f;
 
-	slong d = fmpz_poly_degree(F);
-    if (d <= 0) return 0;
+    len = F->length;
+    if (len == 0)
+        return 0;
+
+    d = len - 1;
+    f = F->coeffs;
     
-	slong  ad_sgn = fmpz_sgn(fmpz_poly_get_coeff_ptr(F, d));
+    ad_sgn = fmpz_sgn(f + d);
 
-	q1 = WORD_MIN;
-	for (i = 0; i < d; ++i) {
-		if ( (fmpz_sgn(fmpz_poly_get_coeff_ptr(F, i))  == ad_sgn) || 
-             (fmpz_sgn(fmpz_poly_get_coeff_ptr(F, i))  == 0) ) continue;
+    q1 = WORD_MIN;
+    for (i = 0; i < d; i++)
+    {
+        if ((fmpz_sgn(f + i)  == ad_sgn) || (fmpz_sgn(f + i)  == 0))
+            continue;
 
-		q2 = WORD_MAX;
-		for (j = i+1; j <= d; ++j)
+        q2 = WORD_MAX;
+        for (j = i + 1; j <= d; j++)
         {
-			if ( fmpz_sgn(fmpz_poly_get_coeff_ptr(F, j)) != ad_sgn ) continue;
-			p = fmpz_sizeinbase(fmpz_poly_get_coeff_ptr(F, i), 2) -
-                fmpz_sizeinbase(fmpz_poly_get_coeff_ptr(F, j), 2) - 1;
-			q2 = FLINT_MIN(q2, p/(j-i) +2);
-		}
-		q1 = FLINT_MAX( q1, q2);
-	}
-	if ( q1 == WORD_MIN ) {
-		return q1 = -1;
-    }
-	return q1+1;
-}
+            if (fmpz_sgn(f + j) != ad_sgn)
+                continue;
 
+            p = fmpz_bits(f + i) - fmpz_bits(f + j) - 1;
+            q2 = FLINT_MIN(q2, p/(j-i) + 2);
+        }
+
+        q1 = FLINT_MAX(q1, q2);
+    }
+
+    if (q1 == WORD_MIN)
+        return q1 = -1;
+
+    return q1+1;
+}
 
