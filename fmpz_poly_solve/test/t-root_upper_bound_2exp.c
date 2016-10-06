@@ -65,8 +65,8 @@ main(void)
 
 
         fmpz_clear(b);
-       
         fmpz_poly_clear(f);
+        fmpz_poly_clear(h);
     }
 
     FLINT_TEST_CLEANUP(state);
