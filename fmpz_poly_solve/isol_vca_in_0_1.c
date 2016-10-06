@@ -54,7 +54,6 @@ long fmpz_poly_solve_Descartes_test ( fmpz_poly_t P,
 
     /* Copy P to Q */
     fmpz_poly_set(Q, P);
-    // mpz_poly_set_unsafe(Q, P);
 
     /* Start computing  Q(1/(x+1)) with the naive algorithm */
     /* The 1st iteration gives the evaluation at x=1, i.e. P(1) */
@@ -123,20 +122,24 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     
     fmpz_t c;
     fmpz_t one;
+    
+    slong status;
+    slong shalf;
+    slong dg;    
+
     fmpz_one(one);
 
-    slong j;
-    slong status = 0;
-    slong shalf= 1;
- 
-    slong dg = fmpz_poly_degree(FF);
+    status = 0; 
+    shalf  = 1;
+
+    dg = fmpz_poly_degree(FF);
     info->dg = dg;
     info->t_dg = dg; 
 
     fmpz_lst_bintvl  queue;
 
     fmpz_bintvl_ptr I;
-    //I = malloc(sizeof(slv_bintvl_t));
+    /* I = malloc(sizeof(slv_bintvl_t)); */
 
     fmpz_poly_t P;
     fmpz_poly_init2(P, dg+1);
@@ -185,7 +188,8 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     if (shalf == 0)
     {
         I = flint_malloc(sizeof(fmpz_bintvl_t));
-        fmpz_set_ui(I->c, 1);
+        if (info->sign == 1)  fmpz_set_ui(I->c, 1);
+        else  fmpz_set_ui(I->c, 0);
         I->k = 1;
         I->is_exact = 1;
         /* fmpz_bintvl_print(I); */
@@ -240,12 +244,12 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
             k++;
         } else if ( k == I->k) {
             fmpz_poly_taylor_shift(P, P, one);
-            // fmpz_poly_taylor_shift_by_1(P, P);
+             /* fmpz_poly_taylor_shift_by_1(P, P); */
             info->nb_trans++;
         } else if ( k > I->k ) {
             fmpz_poly_taylor_shift(P, P, one);
-            //fmpz_poly_taylor_shift_by_1(P, P);
-           info->nb_trans++;
+            /* fmpz_poly_taylor_shift_by_1(P, P); */
+            info->nb_trans++;
             fmpz_poly_solve_scale_2exp(P, k - (I->k));
             info->nb_homo++;
             k = I->k;
@@ -261,11 +265,14 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
 
         if (shalf == 0 )
         {
-             
             fmpz_bintvl_ptr J = flint_malloc(sizeof(fmpz_bintvl_t));
             fmpz_bintvl_init_set(J, I);
             J->k += 1;
-            fmpz_add_ui(J->c, J->c, 1);
+            if (info->sign == 1)  fmpz_add_ui(J->c, J->c, 1);
+            else  { }
+            /* fmpz_set_ui(I->c, 0); */
+     
+            
             J->is_exact = 1;
             fmpz_bintvl_new_root(roots, J, info);
             info->nb_roots++;
@@ -279,7 +286,6 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
         }
         
         V = fmpz_poly_solve_Descartes_test(P, Q, shalf, &status, info);
-        // printf("V: %ld \n", V);
         switch ( V ) {
         case 0:
             fmpz_bintvl_clear(I);

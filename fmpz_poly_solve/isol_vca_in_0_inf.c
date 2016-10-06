@@ -16,7 +16,6 @@
 
 fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info)
 {
-  //info->dg = fmpz_poly_degree(A);
     fmpz_bintvl_t* roots = (fmpz_bintvl_t*) malloc(info->dg * sizeof(fmpz_bintvl_t)); 
 
     fmpz_poly_t F;
@@ -46,7 +45,7 @@ fmpz_bintvl_t*  fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_
     /* Compute the sign of the poly at the left endpoint of the isolating interval */
     fmpz_poly_solve_adjust_bintvl_signs(A, roots, info); 
 
-	//printf( "Finish isolating \n");
+    
     return roots;
 }
 

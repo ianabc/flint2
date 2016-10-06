@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include "fmpz_poly_solve.h"
 
+/* slong */
+/* slv_all( const fmpz_poly_t A, int flag,  */
+
+
 int
 main(void)
 {
@@ -23,7 +27,7 @@ main(void)
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 10; iter++)  /* 1000 * flint_test_multiplier(); iter++)   */
+    for (iter = 0; iter < 1; iter++)  /* 1000 * flint_test_multiplier(); iter++)   */
     {
 #if 0
         FILE *file_in = stdin;    
@@ -47,6 +51,7 @@ main(void)
             fmpz_poly_clear(F);
             continue;
         }
+
         
         /* printf("\nf: "); fmpz_poly_print(f); printf("\n\n");  */
         fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
@@ -76,6 +81,8 @@ main(void)
         slong  i;
         fmpz_poly_t h;
         ulong dd;
+        slv_info_t info;
+        fmpz_bintvl_t* roots;
         
         fmpz_init(b);
         
@@ -113,7 +120,7 @@ main(void)
                 
         
         
-        slv_info_t info;
+
         slv_info_init(info);
 
         info->dg = fmpz_poly_degree(h);
@@ -122,25 +129,26 @@ main(void)
         /* flint_printf("dg = %wd \n", info->dg);   */
         if (info->t_dg <= 2)
         {
-                    
             fmpz_poly_clear(f);
             fmpz_poly_clear(h);
             continue;
         }
 
-        /* printf("\nf: "); fmpz_poly_print(f); printf("\n\n");  */
-        fmpz_bintvl_t* roots = (fmpz_bintvl_t*) flint_malloc(info->dg * sizeof(fmpz_bintvl_t));
         
-        /* Isolate the roots using VCA */
-        roots = fmpz_poly_solve_isol_vca_in_0_inf(h, info); 
-                
-        
-        /* fmpz_poly_solve_print_all_roots(stdout, roots, info->nb_roots);         */
-        /* slv_info_print(info);  */
+        fmpz_dyadic_intvl_struct* R;
+        R = fmpz_dyadic_intvl_vec_init(10);
 
-        /* printf("\nf:= "); fmpz_poly_print(h);; printf(";\n\n"); */
-        /* flint_printf("rr: %wd \t %wd \n", info->nb_roots, info->t_dg); */
+        fmpz_poly_solve_isolate(R, info, f, 1);
+        /* Isolate the roots using VCA */
+        /* roots = fmpz_poly_solve_isol_vca_in_0_inf(F, info); */
+        fmpz_dyadic_intvl_vec_refine_until(f, R, info->nb_roots, 10);
         
+        fmpz_dyadic_intvl_vec_fprint(stdout, R, info->nb_roots);                       
+        
+
+        
+        slv_info_print(info);
+
         if ( info->nb_roots < info->t_dg )
         {
             flint_printf("FAIL:\n");
@@ -150,7 +158,7 @@ main(void)
             abort();
         }
         
-        flint_free(roots);
+        fmpz_dyadic_intvl_vec_clear(R, info->t_dg);
                 
         fmpz_poly_clear(f);
         fmpz_poly_clear(h);

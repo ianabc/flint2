@@ -15,11 +15,7 @@
 
 void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z)
 {
-	fmpz_t tmp;
-	fmpz_init( tmp);
-
-
-	fmpz_t c1, c2;
+    fmpz_t c1, c2;
 	slong k1 = 0;
 	slong k2 = 0;
 
@@ -28,7 +24,7 @@ void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z)
 
 	fmpz_init_set(c1, z->c);
 
-    
+    fmpz_bintvl_print(z);    
     
 	if (z->k <= 0){
 		/* mpz_out_str(stream, 10, z->c);  */

@@ -63,6 +63,7 @@ void fmpz_bintvl_new_root(fmpz_bintvl_t * roots,
     }
 
     fmpz_clear(c);
+
     return;
 }
 
