@@ -13,30 +13,37 @@
 
 slong fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F)
 {
+    slong cont, i, z, len;
+    fmpz * f;
 
-    slong cont, i, z;
-    slong deg = fmpz_poly_degree(F);
+    f = F->coeffs;
+    len = F->length;
 
-    if (deg < 0) return 0;
+    if (len == 0)
+        return 0;
 
-	i = 0; while ( fmpz_sgn(fmpz_poly_get_coeff_ptr(F, i)) == 0 ) i++;
-    cont = fmpz_val2(fmpz_poly_get_coeff_ptr(F, i));
-    
-	for( ; (i <= deg) && cont; i++ )
+    i = 0;
+    while (fmpz_is_zero(f + i))
+        i++;
+
+    cont = fmpz_val2(f + i);
+
+    for ( ; (i < len) && cont; i++)
     {
-		if ( fmpz_sgn(fmpz_poly_get_coeff_ptr(F, i)) != 0 )
+        if (!fmpz_is_zero(f + i))
         {
-			z = fmpz_val2(fmpz_poly_get_coeff_ptr(F, i));
-			if ( z < cont ) cont = z;
-		}
-	}
-	if ( cont == 0 ) return 0;
-
-	for ( i = 0; i <= deg; i++   )
-    {
-		fmpz_fdiv_q_2exp(fmpz_poly_get_coeff_ptr(F, i), fmpz_poly_get_coeff_ptr(F, i), cont);
+            z = fmpz_val2(f + i);
+            if (z < cont)
+                cont = z;
+        }
     }
+
+    if (cont == 0)
+        return 0;
+
+    for (i = 0; i < len; i++)
+        fmpz_fdiv_q_2exp(f + i, f + i, cont);
     
-	return cont;
+    return cont;
 }
 
