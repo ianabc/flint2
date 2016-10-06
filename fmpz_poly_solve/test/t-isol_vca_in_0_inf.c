@@ -133,10 +133,9 @@ main(void)
             fmpz_poly_clear(h);
             continue;
         }
-
-        
+       
         fmpz_dyadic_intvl_struct* R;
-        R = fmpz_dyadic_intvl_vec_init(10);
+        R = fmpz_dyadic_intvl_vec_init(info->t_dg);
 
         fmpz_poly_solve_isolate(R, info, f, 1);
         /* Isolate the roots using VCA */
@@ -145,7 +144,6 @@ main(void)
         
         fmpz_dyadic_intvl_vec_fprint(stdout, R, info->nb_roots);                       
         
-
         
         slv_info_print(info);
 
