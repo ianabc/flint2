@@ -11,28 +11,23 @@
 
 #include "fmpz_poly_solve.h"
 
-/* Returns the sign of P(1/2) */
-int fmpz_poly_solve_sgn_eval_at_half (const fmpz_poly_t P)
+
+
+void fmpz_poly_negate_x(fmpz_poly_t A)
 {
-	slong j, p;
-	int ret;
-	fmpz_t x, y;
-    
-    slong deg = fmpz_poly_degree(P);
-    
-	fmpz_init(y);
-	fmpz_init_set_ui(x, 0);
+    slong dg, j;
 
-	p = deg + 1;
-	for (j = 0; j <= deg; j++, p--)
+    dg = fmpz_poly_degree(A);
+    
+    for (j = 1; j <= dg; j += 2)
     {
-		fmpz_mul_2exp(y, fmpz_poly_get_coeff_ptr(P, j), p);
-		fmpz_add(x, x, y);
-	}
-
-	ret = fmpz_sgn(x);
-
-	fmpz_clear(x);
-	fmpz_clear(y);
-    return ret;
+        fmpz_neg(fmpz_poly_get_coeff_ptr(A, j), fmpz_poly_get_coeff_ptr(A, j));
+    }
+    
+    if (fmpz_sgn(fmpz_poly_get_coeff_ptr(A, dg)) < 0)
+    {
+        fmpz_poly_neg(A, A);
+    }
 }
+
+

@@ -11,28 +11,11 @@
 
 #include "fmpz_poly_solve.h"
 
-/* Returns the sign of P(1/2) */
-int fmpz_poly_solve_sgn_eval_at_half (const fmpz_poly_t P)
+void fmpz_dyadic_intvl_init(fmpz_dyadic_intvl_t a)
 {
-	slong j, p;
-	int ret;
-	fmpz_t x, y;
-    
-    slong deg = fmpz_poly_degree(P);
-    
-	fmpz_init(y);
-	fmpz_init_set_ui(x, 0);
+    a->k 		= 0;
+    a->sgn_left = 0;
 
-	p = deg + 1;
-	for (j = 0; j <= deg; j++, p--)
-    {
-		fmpz_mul_2exp(y, fmpz_poly_get_coeff_ptr(P, j), p);
-		fmpz_add(x, x, y);
-	}
-
-	ret = fmpz_sgn(x);
-
-	fmpz_clear(x);
-	fmpz_clear(y);
-    return ret;
+    fmpz_init(a->c);
 }
+

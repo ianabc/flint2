@@ -148,41 +148,44 @@ struct { \
 
 /* --- End of linked list macros adapted from the BSD queue.h --- */
 
-struct slv_info
+typedef struct
 {
-    ulong 	max_depth;
-    ulong 	nb_nodes;
-    ulong	nb_homo;
-    ulong 	nb_trans;
-    ulong 	nb_half_opt;
-    ulong   nb_pos_hack_1;
-    ulong   nb_pos_hack_2;
+    slong 	max_depth;
+    slong 	nb_nodes;
+    slong	nb_homo;
+    slong 	nb_trans;
+    slong 	nb_half_opt;
+    slong   nb_pos_hack_1;
+    slong   nb_pos_hack_2;
 
-    ulong 	t_dg;       /* The degree of the input */
-    ulong 	dg;         /* The current degree. It might not be equal
+    slong 	t_dg;       /* The degree of the input */
+    slong 	dg;         /* The current degree. It might not be equal
                            to the t_dg if we find a rational root
                            in the process of isolation  */
 
     int     sign;       /* -1 if we solve for negative roots */
     slong   bd;         /* The root bound is 2^{bd} */
-    ulong   nb_roots;   /* THe number of roots */
-};
+    slong   nb_roots;   /* The number of roots */
+} slv_info;
 
-typedef struct slv_info slv_info_t[1];
-typedef struct slv_info * slv_info_ptr;
-typedef const struct slv_info * slv_info_srcptr;
+typedef  slv_info slv_info_t[1];
+typedef  slv_info * slv_info_ptr;
+typedef const  slv_info * slv_info_srcptr;
 
 FLINT_DLL void slv_info_init(slv_info_ptr info);
+FLINT_DLL void slv_info_set(slv_info_t info, const slv_info_t info1);
 FLINT_DLL void slv_info_print(slv_info_srcptr info);
-
-/* Struct for keeping an interval of a subdivision algorithm. */
+FLINT_DLL void slv_info_merge(slv_info_t info, const slv_info_t info1, const slv_info_t info2);
+     
+/* INTERNAL:: Struct for keeping an interval of a subdivision algorithm. */
 struct fmpz_bintvl
 {
     fmpz_t c; /* The interval is \f$(c/2^k, (c+1)/2^k )\f$ */
     slong k;
     unsigned int is_exact;
     int sgn_left;      /* sign on the left endpoint */
-    unsigned int sign; /* are we solving in a negative interval? */
+    int sign; /* are we solving in a negative interval? */
+
     FLINT_SLIST_ENTRY(fmpz_bintvl) pnext; /* pointer to the next entry in the list. */
 };
 
@@ -197,10 +200,15 @@ typedef struct fmpz_lst_intvl_t fmpz_lst_bintvl;
     I = FLINT_SLIST_FIRST(&queue); \
     FLINT_SLIST_REMOVE_HEAD(&queue, pnext); \
 
-typedef struct fmpz_bintvl          fmpz_bintvl_t[1];
-typedef struct fmpz_bintvl *        fmpz_bintvl_ptr;
+typedef  struct fmpz_bintvl          fmpz_bintvl_t[1];
+typedef  struct fmpz_bintvl *        fmpz_bintvl_ptr;
 typedef const struct fmpz_bintvl *  fmpz_bintvl_srcptr;
 
+
+ 
+
+
+   
 FLINT_DLL void fmpz_bintvl_print(fmpz_bintvl_srcptr I);
 FLINT_DLL void fmpz_bintvl_init(fmpz_bintvl_ptr a);
 FLINT_DLL void fmpz_bintvl_init_set(fmpz_bintvl_ptr a, const fmpz_bintvl_srcptr b);
@@ -213,54 +221,104 @@ FLINT_DLL void fmpz_bintvl_new_root(fmpz_bintvl_t* vec_bintvl,
                      fmpz_bintvl_srcptr I,
                      slv_info_ptr info);
 
-FLINT_DLL int fmpz_is_zero_a_root(fmpz_poly_t P,
-                        fmpz_bintvl_t* vec_bintvl,
-                        slv_info_ptr info);
+
+          
+ typedef struct
+ {
+     fmpz_t c;             /* The interval is \f$(c/2^k, (c+1)/2^k )\f$ */
+     slong k;
+     int sgn_left;       /* sign on the left endpoint */
+ } fmpz_dyadic_intvl_struct;
+ typedef fmpz_dyadic_intvl_struct  fmpz_dyadic_intvl_t[1];
+     
+FLINT_DLL void fmpz_dyadic_intvl_init(fmpz_dyadic_intvl_t a);
+FLINT_DLL void fmpz_dyadic_intvl_init_set(fmpz_dyadic_intvl_t a,
+                                          const fmpz_dyadic_intvl_t b);
+FLINT_DLL void fmpz_dyadic_intvl_set_bintvl(fmpz_dyadic_intvl_t a,
+                                            const fmpz_bintvl_t b);
+FLINT_DLL void fmpz_dyadic_intvl_clear(fmpz_dyadic_intvl_t a);
+
+FLINT_DLL void fmpz_dyadic_intvl_get_mid(fmpq_t m, const fmpz_dyadic_intvl_t I);
+FLINT_DLL double fmpz_dyadic_intvl_get_mid_d(const fmpz_dyadic_intvl_t I);
+
+FLINT_DLL void fmpz_dyadic_intvl_fprint(FILE *stream, const fmpz_dyadic_intvl_t I);
+FLINT_DLL void fmpz_dyadic_intvl_print(const fmpz_dyadic_intvl_t I);
+FLINT_DLL void fmpz_poly_solve_print_all_roots(FILE* stream, fmpz_bintvl_t* roots, slong nbr);
+
+FLINT_DLL void fmpz_dyadic_intvl_vec_fprint(FILE* stream, fmpz_dyadic_intvl_struct* roots, slong nbr);
+         
+FLINT_DLL fmpz_dyadic_intvl_struct * fmpz_dyadic_intvl_vec_init(slong len);
+FLINT_DLL void fmpz_dyadic_intvl_vec_clear(fmpz_dyadic_intvl_struct * vec, slong len);
 
 
-
-   FLINT_DLL int fmpz_poly_solve_sgn_eval_at_half(const fmpz_poly_t P);
-   FLINT_DLL int fmpz_poly_solve_sgn_eval_at_c(const fmpz_poly_t P, const fmpz_t c);
-   
-   FLINT_DLL int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P,
-                                                    const fmpz_t c,
-                                                    long k);
-
-
-   
-#if 0
-   FLINT_DLL void fmpz_poly_solve_init(fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_init2(fmpz_poly_solve_t fac, slong alloc);
-
-FLINT_DLL void fmpz_poly_solve_realloc(fmpz_poly_solve_t fac, slong alloc);
-
-FLINT_DLL void fmpz_poly_solve_fit_length(fmpz_poly_solve_t fac, slong len);
-
-FLINT_DLL void fmpz_poly_solve_clear(fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_set(fmpz_poly_solve_t res, const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_insert(fmpz_poly_solve_t fac, 
-                             const fmpz_poly_t p, slong exp);
-
-FLINT_DLL void fmpz_poly_solve_concat(fmpz_poly_solve_t res, 
-                             const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_print(const fmpz_poly_solve_t fac);
-
-FLINT_DLL void fmpz_poly_solve_zassenhaus_recombination(fmpz_poly_solve_t final_fac, 
-	const fmpz_poly_solve_t lifted_fac, 
-    const fmpz_poly_t F, const fmpz_t P, slong exp);
+  
+FLINT_DLL int fmpz_poly_solve_is_zero_a_root(fmpz_poly_t P,
+                                             fmpz_bintvl_t* vec_bintvl,
+                                             slv_info_ptr info);
+FLINT_DLL
+void fmpz_poly_solve_adjust_bintvl_signs(const fmpz_poly_t P,
+                                         fmpz_bintvl_t* roots,
+                                         slv_info_srcptr info);
     
-FLINT_DLL void fmpz_poly_solve_squarefree(fmpz_poly_solve_t fac, const fmpz_poly_t F);
+   
 
-FLINT_DLL void _fmpz_poly_solve_zassenhaus(fmpz_poly_solve_t final_fac, 
-								  slong exp, const fmpz_poly_t f, slong cutoff);
+FLINT_DLL void fmpz_poly_negate_x(fmpz_poly_t A);
+     
+FLINT_DLL int fmpz_poly_solve_sgn_eval_at_half(const fmpz_poly_t P);
+FLINT_DLL int fmpz_poly_solve_sgn_eval_at_c(const fmpz_poly_t P, const fmpz_t c);
+   
+FLINT_DLL int fmpz_poly_solve_sgn_eval_at_c_2exp(const fmpz_poly_t P,
+                                                 const fmpz_t c,
+                                                 slong k);
+   
+   FLINT_DLL slong fmpz_poly_solve_remove_content_2exp(fmpz_poly_t F);
 
-FLINT_DLL void fmpz_poly_solve_zassenhaus(fmpz_poly_solve_t fac, const fmpz_poly_t G);
+   FLINT_DLL slong fmpz_poly_solve_scale_2exp(fmpz_poly_t F, slong k);
 
-#endif /* if 0 */
+   
+   FLINT_DLL slong fmpz_poly_solve_root_upper_bound_2exp(const fmpz_poly_t F);
+   FLINT_DLL slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F);
+
+   FLINT_DLL slong fmpz_poly_solve_var(const fmpz_poly_t f);
+
+     FLINT_DLL
+     fmpz_bintvl_t* fmpz_poly_solve_isol_vca_in_0_inf(const fmpz_poly_t A, slv_info_ptr info);
+     
+     FLINT_DLL
+     void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF, 
+                                          fmpz_bintvl_t* roots, 
+                                          slv_info_ptr info);
+
+FLINT_DLL
+fmpz_bintvl_t*
+_fmpz_poly_solve_isolate_pos(const fmpz_poly_t F, slv_info_ptr info);
+     
+FLINT_DLL
+slong
+fmpz_poly_solve_isolate(fmpz_dyadic_intvl_struct* vec_roots,
+                        slv_info_t info,
+                        const fmpz_poly_t P,
+                        int flag);
+
+FLINT_DLL int fmpz_dyadic_intvl_bisect(const  fmpz_poly_t P,
+                                                  fmpz_dyadic_intvl_t I,
+                                                  slong t);
+FLINT_DLL int fmpz_dyadic_intvl_refine_until( const fmpz_poly_t P,
+                                              fmpz_dyadic_intvl_t I,
+                                              slong t);
+FLINT_DLL void fmpz_dyadic_intvl_vec_refine_until(const fmpz_poly_t P,
+                                                  fmpz_dyadic_intvl_struct* roots,
+                                                  long nbr,
+                                                  slong t);
+     
+FLINT_DLL int fmpz_poly_fread2(FILE * file, fmpz_poly_t poly);
+
+FLINT_DLL
+void fmpz_poly_solve_print_root(FILE *stream, fmpz_bintvl_t z);
+
+FLINT_DLL
+void fmpz_poly_solve_print_all_roots(FILE* stream, fmpz_bintvl_t* roots, slong nbr);
+     
    
 #ifdef __cplusplus
 }

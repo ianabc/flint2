@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("sgn_eval_at_c_2exp....");
+    flint_printf("sgn_eval_at_c_2exp ... ");
     fflush(stdout);
 
     /* Check aliasing */
@@ -35,26 +35,21 @@ main(void)
         fmpz_poly_init(f);
         fmpz_poly_init(g);
         
-        k = 1;
+        k = n_randint(state, 100);
         fmpz_randbits(c, state, 100);
 
-        fmpz_poly_randtest(f, state, n_randint(state, 10), 20);
-        d = fmpz_poly_degree(f);
-        /*        if (d <= 0) continue; */
-        
+        fmpz_poly_randtest(f, state, n_randint(state, 100), 200);
+
         s1 = fmpz_poly_solve_sgn_eval_at_c_2exp(f, c, k); 
 
-      
         fmpz_poly_set(g, f);
         
-       
-        
+        d = fmpz_poly_degree(f);
         for (i = 0; i <= d; i++)
         {
             fmpz_mul_2exp(fmpz_poly_get_coeff_ptr(g, i),
                           fmpz_poly_get_coeff_ptr(g, i), (d - i)*k);
         }
-
 
         fmpz_poly_evaluate_fmpz(c, g, c);
         s2 = fmpz_sgn(c);

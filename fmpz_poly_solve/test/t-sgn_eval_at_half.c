@@ -19,7 +19,7 @@ main(void)
     int iter;
     FLINT_TEST_INIT(state);
 
-    flint_printf("sgn_eval_at_half....");
+    flint_printf("sgn_eval_at_half ... ");
     fflush(stdout);
 
     /* Check aliasing */
