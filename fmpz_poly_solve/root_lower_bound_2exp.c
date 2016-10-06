@@ -16,12 +16,12 @@
 
 slong fmpz_poly_solve_root_lower_bound_2exp(const fmpz_poly_t F)
 {
-    slong q1, q2, p, i, j;
+    slong q1, q2, p, i, j, a0_sgn;
     slong d = fmpz_poly_degree(F);
 
     if (d <= 0) return 0;
     
-    slong  a0_sgn = fmpz_sgn(fmpz_poly_get_coeff_ptr(F, 0));
+    a0_sgn = fmpz_sgn(fmpz_poly_get_coeff_ptr(F, 0));
 
     q1 = WORD_MIN;
     for (i = d; i > 0; --i) {

@@ -25,10 +25,10 @@ long fmpz_poly_solve_Descartes_test ( fmpz_poly_t P,
                                       slv_info_ptr info )
 {  
 
-    unsigned long V = 0;	/** number of sign variations. Initially 0 */
-    long i, j, s, t;
+    slong V = 0;	/** number of sign variations. Initially 0 */
+    slong i, j, s, t;
 
-    long deg = fmpz_poly_degree(P);
+    slong deg = fmpz_poly_degree(P);
 
     /* printf("DT P: "); mpzx_pretty_print (stdout, P); */
     info->nb_nodes++;
@@ -127,6 +127,19 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     slong shalf;
     slong dg;    
 
+    ulong  dd;
+
+    fmpz_lst_bintvl  queue;
+
+    fmpz_bintvl_ptr I;
+    fmpz_bintvl_ptr Il;
+    fmpz_bintvl_ptr Ir;
+
+    fmpz_poly_t P;
+    fmpz_poly_t Q;
+    fmpz_poly_t h;
+
+    fmpz_init(one);
     fmpz_one(one);
 
     status = 0; 
@@ -136,16 +149,11 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     info->dg = dg;
     info->t_dg = dg; 
 
-    fmpz_lst_bintvl  queue;
-
-    fmpz_bintvl_ptr I;
     /* I = malloc(sizeof(slv_bintvl_t)); */
 
-    fmpz_poly_t P;
     fmpz_poly_init2(P, dg+1);
     fmpz_poly_set(P, FF);
 
-    fmpz_poly_t Q;
     fmpz_poly_init2(Q, dg+1);
     fmpz_poly_set(Q, P);
 
@@ -175,11 +183,9 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     }
 
     /* the polynomial h(x) = 2*x -1 */
-    fmpz_poly_t h;
     fmpz_poly_init2(h, 2);
     fmpz_poly_set_coeff_si(h, 1, 2);
     fmpz_poly_set_coeff_si(h, 0, -1);
-    ulong  dd;
              
     /* Check if 1/2 is a root */
     /* printf("\nP := "); fmpz_poly_print_pretty(P, "T"); printf(";\n\n"); */
@@ -210,11 +216,11 @@ void fmpz_poly_solve_isol_vca_in_0_1(fmpz_poly_t FF,
     FLINT_SLIST_INIT(&queue);
     info->max_depth = 1;
 
-    fmpz_bintvl_ptr Il = flint_malloc(sizeof(fmpz_bintvl_t));
+    Il = flint_malloc(sizeof(fmpz_bintvl_t));
     fmpz_bintvl_init(Il);
     Il->k = 1;
 
-    fmpz_bintvl_ptr Ir = flint_malloc(sizeof(fmpz_bintvl_t));
+    Ir = flint_malloc(sizeof(fmpz_bintvl_t));
     fmpz_bintvl_init(Ir);
     Ir->k = 1;
     fmpz_set_ui(Ir->c, 1);

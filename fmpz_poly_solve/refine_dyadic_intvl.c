@@ -23,7 +23,7 @@ int fmpz_bisect_dyadic_intvl_bisect(const  fmpz_poly_t P,
     fmpz_init(m);
 
     /* fprintf(stderr, "c: ");mpz_out_str(stderr, 10, I->c); fprintf(stderr, " ");  */
-    // fprintf(stderr, "2^%ld \n", I->k);
+    /* fprintf(stderr, "2^%ld \n", I->k); */
     for (i=0; i < t; i++) {
        /* fprintf(stderr, "bm: "); mpz_out_str(stderr, 10, I->c); fprintf(stderr, " "); */
        /* fprintf(stderr, " b  2^%ld \n", I->k); */
@@ -70,8 +70,8 @@ int fmpz_bisect_dyadic_intvl_bisect(const  fmpz_poly_t P,
 
 int fmpz_dyadic_intvl_refine_until( const fmpz_poly_t P, fmpz_dyadic_intvl_t I, slong t)
 {
-    // t should be negative
-    // debug("here");
+    /* t should be negative */
+    /* debug("here"); */
     /* check_debug(t >= 0, "The width should be small"); */
     long m;
 

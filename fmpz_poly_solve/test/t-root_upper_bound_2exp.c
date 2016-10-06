@@ -23,7 +23,7 @@ main(void)
     fflush(stdout);
 
     /* Check aliasing */
-    for (iter = 0; iter < 10; iter++)  //1000 * flint_test_multiplier(); iter++) 
+    for (iter = 0; iter < 10; iter++)  /* 1000 * flint_test_multiplier(); iter++)  */
     {
         fmpz_poly_t f;
         fmpz_t b;
